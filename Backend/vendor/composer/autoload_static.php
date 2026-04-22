@@ -31,7 +31,6 @@ class ComposerStaticInit52e4a883c99a913d5536f33e2ff8edd3
             'Psr\\Http\\Server\\' => 16,
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Container\\' => 14,
-            'PaulChcch\\ProjetTpi\\' => 20,
         ),
         'N' => 
         array (
@@ -50,6 +49,10 @@ class ComposerStaticInit52e4a883c99a913d5536f33e2ff8edd3
         array (
             'Fig\\Http\\Message\\' => 17,
             'FastRoute\\' => 10,
+        ),
+        'A' => 
+        array (
+            'App\\' => 4,
         ),
     );
 
@@ -84,10 +87,6 @@ class ComposerStaticInit52e4a883c99a913d5536f33e2ff8edd3
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
-        'PaulChcch\\ProjetTpi\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/src',
-        ),
         'Nyholm\\Psr7\\' => 
         array (
             0 => __DIR__ . '/..' . '/nyholm/psr7/src',
@@ -111,6 +110,10 @@ class ComposerStaticInit52e4a883c99a913d5536f33e2ff8edd3
         'FastRoute\\' => 
         array (
             0 => __DIR__ . '/..' . '/nikic/fast-route/src',
+        ),
+        'App\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src',
         ),
     );
 

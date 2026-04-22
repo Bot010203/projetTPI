@@ -2,7 +2,7 @@
     "name": "paul-chcch/projet-tpi",
     "autoload": {
         "psr-4": {
-            "PaulChcch\\ProjetTpi\\": "src/"
+            "App\\": "src/"
         }
     },
     "authors": [
