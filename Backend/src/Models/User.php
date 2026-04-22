@@ -11,18 +11,19 @@ namespace App\Models;
 use App\Models\PDOSingleton;
 use PDO;
 
+
 /**
  * Summary of User classe user 
  */
 class User {
-    public $id;
+    public $id_user;
     public $email;
     public $login;
     public $password;
     public $token;
 
-    public function __construct($id, $login, $email, $password, $token) {
-        $this->id = $id;
+    public function __construct($id_user, $login, $email, $password, $token) {
+        $this->id_user = $id_user;
         $this->login = $login;
         $this->email = $email;
         $this->password = $password;
@@ -33,7 +34,7 @@ class User {
      * Summary of Create permet de créer un user dans la base de données
      * @return void
      */
-    public function Create() {
+    public function create() {
         $pdo = PDOSingleton::getInstance();
         $stmt = $pdo->prepare("INSERT INTO users (login, email, password, token) VALUES (:login, :email, :password, :token)");
         $stmt->execute([
@@ -42,18 +43,18 @@ class User {
             ':password' => password_hash($this->password, PASSWORD_BCRYPT),
             ':token' => $this->token
         ]);
-        $this->id = $pdo->lastInsertId();
+        $this->id_user = $pdo->lastInsertId();
     }
 
     /**
      * Summary of Update permet de mettre à jour un user dans la base de données
      * @return void
      */
-    public function Update() {
+    public function update() {
         $pdo = PDOSingleton::getInstance();
-        $stmt = $pdo->prepare("UPDATE users SET login = :login, email = :email, password = :password, token = :token WHERE id = :id");
+        $stmt = $pdo->prepare("UPDATE users SET login = :login, email = :email, password = :password, token = :token WHERE id_user = :id_user");
         $stmt->execute([
-            ':id' => $this->id,
+            ':id_user' => $this->id_user,
             ':login' => $this->login,
             ':email' => $this->email,
             ':password' => password_hash($this->password, PASSWORD_BCRYPT),
@@ -65,10 +66,10 @@ class User {
      * Summary of Delete permet de supprimer un user dans la base de données
      * @return void
      */
-    public function Delete() {
+    public function delete() {
         $pdo = PDOSingleton::getInstance();
-        $stmt = $pdo->prepare("DELETE FROM users WHERE id = :id");
-        $stmt->execute([':id' => $this->id]);
+        $stmt = $pdo->prepare("DELETE FROM users WHERE id_user = :id_user");
+        $stmt->execute([':id_user' => $this->id_user]);
     }
 
     /**
@@ -76,7 +77,7 @@ class User {
      * @return array
      */
 
-    public static function ReadAll() {
+    public static function readAll() {
         $pdo = PDOSingleton::getInstance();
         $stmt = $pdo->prepare("SELECT * FROM users");
         $stmt->execute();
@@ -87,9 +88,9 @@ class User {
      * @param int $id
      * @return array
      */
-    public static function ReadById($id) {
+    public static function readById($id) {
         $pdo = PDOSingleton::getInstance();
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE id = :id");
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE id_user = :id");
         $stmt->execute([':id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
@@ -99,7 +100,7 @@ class User {
      * @param string $email
      * @return array
      */
-    public static function ReadByEmail($email) {
+    public static function readByEmail($email) {
         $pdo = PDOSingleton::getInstance();
         $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
         $stmt->execute([':email' => $email]);
