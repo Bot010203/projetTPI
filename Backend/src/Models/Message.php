@@ -40,7 +40,8 @@ class Message {
      */
     public function Create() {
         $pdo = PDOSingleton::getInstance();
-        $stmt = $pdo->prepare("INSERT INTO messages (text, timestamp, read, id_sender, id_recipient, id_advertisement, original_message_id) VALUES (:text, :timestamp, :read, :id_sender, :id_recipient, :id_advertisement, :original_message_id)");
+        $stmt = $pdo->prepare("INSERT INTO messages (text, `timestamp`, `read`, id_sender, id_recipient, id_advertisement, original_message_id) 
+                               VALUES (:text, :timestamp, :read, :id_sender, :id_recipient, :id_advertisement, :original_message_id)");
         $stmt->execute([
             ':text' => $this->text,
             ':timestamp' => $this->timestamp,
@@ -51,5 +52,35 @@ class Message {
             ':original_message_id' => $this->original_message_id
         ]);
         $this->id_message = $pdo->lastInsertId();
+    }
+
+    public function delete() {
+        $pdo = PDOSingleton::getInstance();
+        $stmt = $pdo->prepare("DELETE FROM messages WHERE id_message = :id_message");
+        $stmt->execute([':id_message' => $this->id_message]);
+    }
+
+    public function read() {
+        $pdo = PDOSingleton::getInstance();
+        $stmt = $pdo->prepare("SELECT * FROM messages WHERE id_message = :id_message");
+        $stmt->execute([':id_message' => $this->id_message]);
+        $message = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($message) {
+            $this->text = $message['text'];
+            $this->timestamp = $message['timestamp'];
+            $this->read = (bool)$message['read'];
+            $this->id_sender = $message['id_sender'];
+            $this->id_recipient = $message['id_recipient'];
+            $this->id_advertisement = $message['id_advertisement'];
+            $this->original_message_id = $message['original_message_id'];
+        }
+    }
+
+    public function readOriginal() {
+        $pdo = PDOSingleton::getInstance();
+        $stmt = $pdo->prepare("SELECT * FROM messages WHERE original_message_id = :id_message");
+        $stmt->execute([':id_message' => $this->id_message]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
