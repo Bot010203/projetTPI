@@ -45,9 +45,9 @@ class Annonce {
      * Summary of Create permet de créer une annonce dans la base de données
      * @return void
      */
-    public function Create() {
-        $pdo = PDOSingleton::getInstance();
-        $stmt = $pdo->prepare("INSERT INTO annonces (title, description, sale, location, brand, model, price, year_first_registration, date_publication, id_user) VALUES (:title, :description, :sale, :location, :brand, :model, :price, :year_first_registration, :date_publication, :id_user)");
+    public function create() {
+    $pdo = PDOSingleton::getInstance()->getConnection();        
+    $stmt = $pdo->prepare("INSERT INTO annonces (title, description, sale, location, brand, model, price, year_first_registration, date_publication, id_user) VALUES (:title, :description, :sale, :location, :brand, :model, :price, :year_first_registration, :date_publication, :id_user)");
         $stmt->execute([
             ':title' => $this->title,
             ':description' => $this->description,
@@ -67,8 +67,8 @@ class Annonce {
      * Summary of Update permet de mettre à jour une annonce dans la base de données
      * @return void
      */
-    public function Update() {
-        $pdo = PDOSingleton::getInstance();
+    public function update() {
+        $pdo = PDOSingleton::getInstance()->getConnection();
         $stmt = $pdo->prepare("UPDATE annonces SET title = :title, description = :description, sale = :sale, location = :location, brand = :brand, model = :model, price = :price, year_first_registration = :year_first_registration, date_publication = :date_publication, id_user = :id_user WHERE id_advertisement = :id_advertisement");
         $stmt->execute([
             ':id_advertisement' => $this->id_advertisement,
@@ -89,8 +89,8 @@ class Annonce {
      * Summary of Delete permet de supprimer une annonce dans la base de données
      * @return void
      */
-    public function Delete() {
-        $pdo = PDOSingleton::getInstance();
+    public function delete() {
+        $pdo = PDOSingleton::getInstance()->getConnection();
         $stmt = $pdo->prepare("DELETE FROM annonces WHERE id_advertisement = :id_advertisement");
         $stmt->execute([':id_advertisement' => $this->id_advertisement]);
     }
@@ -99,8 +99,8 @@ class Annonce {
      * Summary of ReadAll permet de lire toutes les annonces dans la base de données
      * @return array
      */
-    public static function ReadAll() {
-        $pdo = PDOSingleton::getInstance();
+    public static function readAll() {
+        $pdo = PDOSingleton::getInstance()->getConnection();
         $stmt = $pdo->prepare("SELECT * FROM annonces");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -111,8 +111,8 @@ class Annonce {
      * @param int $id_advertisement
      * @return array
      */
-    public static function ReadById($id_advertisement) {
-        $pdo = PDOSingleton::getInstance();
+    public static function readById($id_advertisement) {
+        $pdo = PDOSingleton::getInstance()->getConnection();
         $stmt = $pdo->prepare("SELECT * FROM annonces WHERE id_advertisement = :id_advertisement");
         $stmt->execute([':id_advertisement' => $id_advertisement]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -123,8 +123,8 @@ class Annonce {
      * @param int $id_user
      * @return array
      */
-    public static function ReadByUserId($id_user) {
-        $pdo = PDOSingleton::getInstance();
+    public static function readByUserId($id_user) {
+        $pdo = PDOSingleton::getInstance()->getConnection();
         $stmt = $pdo->prepare("SELECT * FROM annonces WHERE id_user = :id_user");
         $stmt->execute([':id_user' => $id_user]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);                                                   

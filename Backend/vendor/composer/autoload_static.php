@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit52e4a883c99a913d5536f33e2ff8edd3
+class ComposerStaticInit61ef6e8349363fafdc9542bd9a8f591a
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -47,6 +47,7 @@ class ComposerStaticInit52e4a883c99a913d5536f33e2ff8edd3
         ),
         'F' => 
         array (
+            'Firebase\\JWT\\' => 13,
             'Fig\\Http\\Message\\' => 17,
             'FastRoute\\' => 10,
         ),
@@ -103,6 +104,10 @@ class ComposerStaticInit52e4a883c99a913d5536f33e2ff8edd3
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
         ),
+        'Firebase\\JWT\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
+        ),
         'Fig\\Http\\Message\\' => 
         array (
             0 => __DIR__ . '/..' . '/fig/http-message-util/src',
@@ -124,9 +129,9 @@ class ComposerStaticInit52e4a883c99a913d5536f33e2ff8edd3
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit52e4a883c99a913d5536f33e2ff8edd3::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit52e4a883c99a913d5536f33e2ff8edd3::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit52e4a883c99a913d5536f33e2ff8edd3::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit61ef6e8349363fafdc9542bd9a8f591a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit61ef6e8349363fafdc9542bd9a8f591a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit61ef6e8349363fafdc9542bd9a8f591a::$classMap;
 
         }, null, ClassLoader::class);
     }

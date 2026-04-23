@@ -38,8 +38,8 @@ class Message {
      * Summary of Create permet de créer un message dans la base de données
      * @return void
      */
-    public function Create() {
-        $pdo = PDOSingleton::getInstance();
+    public function create() {
+        $pdo = PDOSingleton::getInstance()->getConnection();
         $stmt = $pdo->prepare("INSERT INTO messages (text, `timestamp`, `read`, id_sender, id_recipient, id_advertisement, original_message_id) 
                                VALUES (:text, :timestamp, :read, :id_sender, :id_recipient, :id_advertisement, :original_message_id)");
         $stmt->execute([
@@ -55,13 +55,13 @@ class Message {
     }
 
     public function delete() {
-        $pdo = PDOSingleton::getInstance();
+        $pdo = PDOSingleton::getInstance()->getConnection();
         $stmt = $pdo->prepare("DELETE FROM messages WHERE id_message = :id_message");
         $stmt->execute([':id_message' => $this->id_message]);
     }
 
     public function read() {
-        $pdo = PDOSingleton::getInstance();
+        $pdo = PDOSingleton::getInstance()->getConnection();
         $stmt = $pdo->prepare("SELECT * FROM messages WHERE id_message = :id_message");
         $stmt->execute([':id_message' => $this->id_message]);
         $message = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -78,7 +78,7 @@ class Message {
     }
 
     public function readOriginal() {
-        $pdo = PDOSingleton::getInstance();
+        $pdo = PDOSingleton::getInstance()->getConnection();
         $stmt = $pdo->prepare("SELECT * FROM messages WHERE original_message_id = :id_message");
         $stmt->execute([':id_message' => $this->id_message]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
