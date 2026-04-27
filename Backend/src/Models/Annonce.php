@@ -47,7 +47,7 @@ class Annonce {
      */
     public function create() {
     $pdo = PDOSingleton::getInstance()->getConnection();        
-    $stmt = $pdo->prepare("INSERT INTO annonces (title, description, sale, location, brand, model, price, year_first_registration, date_publication, id_user) VALUES (:title, :description, :sale, :location, :brand, :model, :price, :year_first_registration, :date_publication, :id_user)");
+    $stmt = $pdo->prepare("INSERT INTO advertisements (title, description, sale, location, brand, model, price, year_first_registration, date_publication, id_user) VALUES (:title, :description, :sale, :location, :brand, :model, :price, :year_first_registration, :date_publication, :id_user)");
         $stmt->execute([
             ':title' => $this->title,
             ':description' => $this->description,
@@ -69,7 +69,7 @@ class Annonce {
      */
     public function update() {
         $pdo = PDOSingleton::getInstance()->getConnection();
-        $stmt = $pdo->prepare("UPDATE annonces SET title = :title, description = :description, sale = :sale, location = :location, brand = :brand, model = :model, price = :price, year_first_registration = :year_first_registration, date_publication = :date_publication, id_user = :id_user WHERE id_advertisement = :id_advertisement");
+        $stmt = $pdo->prepare("UPDATE advertisements SET title = :title, description = :description, sale = :sale, location = :location, brand = :brand, model = :model, price = :price, year_first_registration = :year_first_registration, date_publication = :date_publication, id_user = :id_user WHERE id_advertisement = :id_advertisement");
         $stmt->execute([
             ':id_advertisement' => $this->id_advertisement,
             ':title' => $this->title,
@@ -91,7 +91,7 @@ class Annonce {
      */
     public function delete() {
         $pdo = PDOSingleton::getInstance()->getConnection();
-        $stmt = $pdo->prepare("DELETE FROM annonces WHERE id_advertisement = :id_advertisement");
+        $stmt = $pdo->prepare("DELETE FROM advertisements WHERE id_advertisement = :id_advertisement");
         $stmt->execute([':id_advertisement' => $this->id_advertisement]);
     }
 
@@ -101,7 +101,7 @@ class Annonce {
      */
     public static function readAll() {
         $pdo = PDOSingleton::getInstance()->getConnection();
-        $stmt = $pdo->prepare("SELECT * FROM annonces");
+        $stmt = $pdo->prepare("SELECT * FROM advertisements");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -113,7 +113,7 @@ class Annonce {
      */
     public static function readById($id_advertisement) {
         $pdo = PDOSingleton::getInstance()->getConnection();
-        $stmt = $pdo->prepare("SELECT * FROM annonces WHERE id_advertisement = :id_advertisement");
+        $stmt = $pdo->prepare("SELECT * FROM advertisements WHERE id_advertisement = :id_advertisement");
         $stmt->execute([':id_advertisement' => $id_advertisement]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
@@ -125,7 +125,7 @@ class Annonce {
      */
     public static function readByUserId($id_user) {
         $pdo = PDOSingleton::getInstance()->getConnection();
-        $stmt = $pdo->prepare("SELECT * FROM annonces WHERE id_user = :id_user");
+        $stmt = $pdo->prepare("SELECT * FROM advertisements WHERE id_user = :id_user");
         $stmt->execute([':id_user' => $id_user]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);                                                   
     }

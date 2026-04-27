@@ -1,6 +1,7 @@
 <?php
 namespace App\Routes;
 use App\Controllers\AuthController;
+use App\Controllers\AnnonceController;
 use Slim\App;
 final class Web {
     public static function register(App $app): void {
@@ -10,7 +11,12 @@ final class Web {
         });
         $app->post('/login', [AuthController::class, 'login']);
         $app->post('/register', [AuthController::class, 'register']);
-        
+
+        $app->get('/annonces', [AnnonceController::class, 'recupererAnnonces']);
+        $app->get('/annonces/{id}', [AnnonceController::class, 'recupererAnnooncesById']);
+        $app->post('/annonces', [AnnonceController::class, 'creerAnnonce']);
+        $app->put('/annonces/{id}', [AnnonceController::class, 'modifierAnnonce']);
+        $app->delete('/annonces/{id}', [AnnonceController::class, 'supprimerAnnonce']);
     }
 }
 
