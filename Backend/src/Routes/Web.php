@@ -2,14 +2,17 @@
 namespace App\Routes;
 use App\Controllers\AuthController;
 use App\Controllers\AnnonceController;
+use App\Controllers\ImageController;
 use Slim\App;
-final class Web {
+final class Web
+{
     /**
      * Summary of register 
      * @param App $app
      * @return void
      */
-    public static function register(App $app): void {
+    public static function register(App $app): void
+    {
         $app->get('/', function ($request, $response) {
             $response->getBody()->write('Bienvenue');
             return $response;
@@ -24,6 +27,11 @@ final class Web {
         $app->post('/annonces', [AnnonceController::class, 'creerAnnonce']);
         $app->put('/annonces/{id}', [AnnonceController::class, 'modifierAnnonce']);
         $app->delete('/annonces/{id}', [AnnonceController::class, 'supprimerAnnonce']);
+
+        // Routes pour les images
+        $app->post('/annonces/{id}/images', [ImageController::class, 'ajouterImage']);
+        $app->get('/annonces/{id}/images', [ImageController::class, 'recupererImages']);
+        $app->delete('/annonces/{id}/images/{id_image}', [ImageController::class, 'supprimerImage']);
     }
 }
 
