@@ -12,7 +12,7 @@ use App\Models\PDOSingleton;
 use PDO;
 
 /**
- * Summary of User classe user 
+ * Summary of User classe user avec CRUD
  */
 class User {
     public $id_user;

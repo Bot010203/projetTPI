@@ -1,4 +1,11 @@
 <?php
+/**
+ * Nom du projet : ProjetTPI
+ * Auteur : Paul Chiacchiari
+ * Date : 22.04.2026
+ * Nom fichier : AnnonceController.php
+ * But : Classe AnnonceController avec les méthodes pour gérer les annonces du site web
+ */
 namespace App\Controllers;
 
 use App\Models\PDOSingleton;
@@ -39,7 +46,7 @@ class AnnonceController
 
         $allowed_sort = ['price', 'year_first_registration', 'date_publication'];
         $allowed_order = ['ASC', 'DESC'];
-        //
+        
         if (!in_array($sort_by, $allowed_sort))
             $sort_by = 'date_publication';
         if (!in_array(strtoupper($sort_order), $allowed_order))

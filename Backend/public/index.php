@@ -1,4 +1,11 @@
 <?php
+/**
+ * Nom du projet : ProjetTPI
+ * Auteur : Paul Chiacchiari
+ * Date : 22.04.2026
+ * Nom fichier : index.php
+ * But : Point d'entrée de l'application
+ */
 use Slim\Factory\AppFactory;
 use App\Routes\Web;
 

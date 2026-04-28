@@ -1,4 +1,11 @@
 <?php
+/**
+ * Nom du projet : ProjetTPI
+ * Auteur : Paul Chiacchiari
+ * Date : 22.04.2026
+ * Nom fichier : AuthController.php
+ * But : Classe AuthController pour gérer les opérations d'authentification
+ */
 
 namespace App\Controllers;
 
@@ -48,9 +55,9 @@ class AuthController
     {
         $data = json_decode($request->getBody()->getContents(), true) ?? [];
 
-        $login           = $data['login']            ?? '';
-        $email           = $data['email']            ?? '';
-        $password        = $data['password']         ?? '';
+        $login = $data['login'] ?? '';
+        $email  = $data['email'] ?? '';
+        $password = $data['password'] ?? '';
         $confirmPassword = $data['confirm_password'] ?? '';
 
         if ($login == '' || $email == '' || $password == '') {

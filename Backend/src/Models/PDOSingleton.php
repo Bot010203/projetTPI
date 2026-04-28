@@ -1,4 +1,11 @@
 <?php
+/**
+ * Nom du projet : ProjetTPI
+ * Auteur : Paul Chiacchiari
+ * Date : 22.04.2026
+ * Nom fichier : PDOSingleton.php
+ * But : Classe PDOSingleton pour gérer la connexion à la base de données
+ */
 namespace App\Models;
 use PDO;
 use PDOException;
