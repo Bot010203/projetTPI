@@ -32,6 +32,12 @@ final class Web
         $app->post('/annonces/{id}/images', [ImageController::class, 'ajouterImage']);
         $app->get('/annonces/{id}/images', [ImageController::class, 'recupererImages']);
         $app->delete('/annonces/{id}/images/{id_image}', [ImageController::class, 'supprimerImage']);
+
+        // Routes pour les messages
+        $app->post('/annonces/{id}/messages', [MessageController::class, 'envoyerMessage']);
+        $app->get('/conversations', [MessageController::class, 'avoirConversations']);
+        $app->get('/conversations/{id_advertisement}/{id_user}', [MessageController::class, 'avoirMessagesParConversation']);
+        $app->delete('/conversations/{id_advertisement}/{id_user}', [MessageController::class, 'supprimerConversation']);
     }
 }
 
