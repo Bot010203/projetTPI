@@ -46,7 +46,7 @@ class AnnonceController
 
         $allowed_sort = ['price', 'year_first_registration', 'date_publication'];
         $allowed_order = ['ASC', 'DESC'];
-        
+
         if (!in_array($sort_by, $allowed_sort))
             $sort_by = 'date_publication';
         if (!in_array(strtoupper($sort_order), $allowed_order))
@@ -116,14 +116,18 @@ class AnnonceController
     private function getUtilisateurConnecte(Request $request)
     {
         $authHeader = $request->getHeaderLine('Authorization');
-        if (!$authHeader || !str_starts_with($authHeader, 'Bearer ')) {
+
+        if (!$authHeader) {
             return null;
         }
-        $token = substr($authHeader, 7);
+        $token = str_replace('Bearer ', '', $authHeader);
+
         try {
-            $decoded = JWT::decode($token, new Key($this->secret, 'HS256'));
+            $secret = "8f3c9c2b7a1d4e6f9c0b5a7d9e1f2c3a_super_secret_key_2026";
+            $decoded = JWT::decode($token, new Key($secret, 'HS256'));
+
             return User::readById($decoded->id);
-        } catch (\Exception $e) {
+        } catch (Exception $error) {
             return null;
         }
     }

@@ -44,7 +44,6 @@ class AuthController
             'HS256'
         );
 
-        // A14 : mise à jour du token en DB à chaque authentification
         $userObj = new User($user['id_user'], $user['login'], $user['email'], $user['password'], $token);
         $userObj->updateToken();
 
@@ -78,7 +77,6 @@ class AuthController
             return $this->send($response, "Email déjà utilisé", 409);
         }
 
-        // Vérifie l'unicité du login
         if (User::readByLogin($login)) {
             return $this->send($response, "Login déjà utilisé", 409);
         }

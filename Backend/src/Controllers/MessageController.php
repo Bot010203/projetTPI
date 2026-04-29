@@ -104,6 +104,12 @@ class MessageController
         $response->getBody()->write(json_encode($messages));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
+    /**
+     * Summary of supprimerConversation permet de 
+     * @param Request $request
+     * @param Response $response
+     * @param array $args
+     */
     public function supprimerConversation(Request $request, Response $response, array $args)
     {
         $user = $this->getUtilisateurConnecte($request);

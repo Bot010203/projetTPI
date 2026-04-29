@@ -45,7 +45,7 @@ class User {
         $this->id_user = $pdo->lastInsertId();
     }
     /**
-     * Met à jour uniquement le token (A14 : appelé à chaque login)
+     * Met à jour uniquement le token 
      * @return void
      */
     public function updateToken() {
@@ -58,7 +58,7 @@ class User {
     }
 
     /**
-     * Summary of ReadById permet de lire un user dans la base de données en fonction de son id
+     * permet de lire un user dans la base de données en fonction de son id
      * @param int $id
      * @return array
      */
