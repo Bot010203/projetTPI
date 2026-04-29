@@ -32,11 +32,7 @@ class ImageController
         $typesAutorises = ['image/jpeg', 'image/png', 'image/gif'];
         $tailleMax = 5 * 1024 * 1024;
         //Vérifier que l'utilisateur est connecté
-        $user = $this->getUtilisateurConnecte($request);
-        if (!$user) {
-            $response->getBody()->write(json_encode(['error' => 'Non autorisé']));
-            return $response->withHeader('Content-Type', 'application/json')->withStatus(401);
-        }
+        $user = $request->getAttribute('user');
 
         //Vérifier que l'annonce existe
         $annonce = Annonce::readById($args['id']);
@@ -130,11 +126,7 @@ class ImageController
     public function supprimerImage(Request $request, Response $response, array $args)
     {
         // Vérifier que l'utilisateur est connecté
-        $user = $this->getUtilisateurConnecte($request);
-        if (!$user) {
-            $response->getBody()->write(json_encode(['error' => 'Non autorisé']));
-            return $response->withHeader('Content-Type', 'application/json')->withStatus(401);
-        }
+        $user = $request->getAttribute('user');
 
         // Vérifier que l'image existe
         $image = Image::readById($args['id']);
@@ -164,23 +156,5 @@ class ImageController
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
 
-    private function getUtilisateurConnecte(Request $request)
-    {
-        $authHeader = $request->getHeaderLine('Authorization');
-
-        if (!$authHeader) {
-            return null;
-        }
-        $token = str_replace('Bearer ', '', $authHeader);
-
-        try {
-            $secret = "8f3c9c2b7a1d4e6f9c0b5a7d9e1f2c3a_super_secret_key_2026";
-            $decoded = JWT::decode($token, new Key($secret, 'HS256'));
-
-            return User::readById($decoded->id);
-        } catch (Exception $error) {
-            return null;
-        }
-    }
 
 }

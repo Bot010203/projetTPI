@@ -109,29 +109,6 @@ class AnnonceController
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
     /**
-     * Summary of getUtilisateurConnecte permet de récuperer l'utilisateur à partir du JWT
-     * @param Request $request
-     * @return array|null
-     */
-    private function getUtilisateurConnecte(Request $request)
-    {
-        $authHeader = $request->getHeaderLine('Authorization');
-
-        if (!$authHeader) {
-            return null;
-        }
-        $token = str_replace('Bearer ', '', $authHeader);
-
-        try {
-            $secret = "8f3c9c2b7a1d4e6f9c0b5a7d9e1f2c3a_super_secret_key_2026";
-            $decoded = JWT::decode($token, new Key($secret, 'HS256'));
-
-            return User::readById($decoded->id);
-        } catch (Exception $error) {
-            return null;
-        }
-    }
-    /**
      * Summary of recupererAnnooncesById permet de récuperer une annonce par son id
      * @param Request $request
      * @param Response $response
@@ -155,11 +132,7 @@ class AnnonceController
      */
     public function creerAnnonce(Request $request, Response $response)
     {
-        $user = $this->getUtilisateurConnecte($request);
-        if (!$user) {
-            $response->getBody()->write(json_encode(['error' => 'Pas autorisé']));
-            return $response->withHeader('Content-Type', 'application/json')->withStatus(401);
-        }
+        $user = $request->getAttribute('user');
         $data = json_decode($request->getBody()->getContents(), true);
         if (empty($data['title'])) {
             $response->getBody()->write(json_encode(['error' => 'Le titre est requis']));
@@ -193,11 +166,7 @@ class AnnonceController
      */
     public function modifierAnnonce(Request $request, Response $response, array $args)
     {
-        $user = $this->getUtilisateurConnecte($request);
-        if (!$user) {
-            $response->getBody()->write(json_encode(['error' => 'Non autorisé']));
-            return $response->withHeader('Content-Type', 'application/json')->withStatus(401);
-        }
+        $user = $request->getAttribute('user');
 
         //Vérifie si l'annonce existe
         $annonce = Annonce::readById($args['id']);
@@ -247,11 +216,7 @@ class AnnonceController
     public function supprimerAnnonce(Request $request, Response $response, array $args)
     {
         //Vérifie l'utilisateur connecté
-        $user = $this->getUtilisateurConnecte($request);
-        if (!$user) {
-            $response->getBody()->write(json_encode(['error' => 'Pas autorisé']));
-            return $response->withHeader('Content-Type', 'application/json')->withStatus(401);
-        }
+        $user = $request->getAttribute('user');
 
         //Vérifie si l'annonce existe 
         $annonce = Annonce::readById($args['id']);

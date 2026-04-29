@@ -27,11 +27,7 @@ class MessageController
      */
     public function envoyerMessage(Request $request, Response $response, array $args)
     {
-        $user = $this->getUtilisateurConnecte($request);
-        if (!$user) {
-            $response->getBody()->write(json_encode(['error' => 'Utilisateur pas authentifié']));
-            return $response->withHeader('Content-Type', 'application/json')->withStatus(401);
-        }
+        $user = $request->getAttribute('user');
         $annonce = Annonce::readById($args['id']);
         if (!$annonce) {
             $response->getBody()->write(json_encode(['error' => 'Annonce pas trouvée']));
@@ -64,22 +60,14 @@ class MessageController
      */
     public function avoirConversations(Request $request, Response $response)
     {
-        $user = $this->getUtilisateurConnecte($request);
-        if (!$user) {
-            $response->getBody()->write(json_encode(['error' => 'Utilisateur pas authentifié']));
-            return $response->withHeader('Content-Type', 'application/json')->withStatus(401);
-        }
+        $user = $request->getAttribute('user');
         $conversations = Message::avoirConversations($user['id_user']);
         $response->getBody()->write(json_encode($conversations));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
     public function avoirMessagesParConversation(Request $request, Response $response, array $args)
     {
-        $user = $this->getUtilisateurConnecte($request);
-        if (!$user) {
-            $response->getBody()->write(json_encode(['error' => 'Utilisateur pas authentifié']));
-            return $response->withHeader('Content-Type', 'application/json')->withStatus(401);
-        }
+        $user = $request->getAttribute('user');
         $messages = Message::avoirMessagesParConversation(
             $args['id_advertisement'],
             $args['id_user'],
@@ -112,11 +100,7 @@ class MessageController
      */
     public function supprimerConversation(Request $request, Response $response, array $args)
     {
-        $user = $this->getUtilisateurConnecte($request);
-        if (!$user) {
-            $response->getBody()->write(json_encode(['error' => 'Utilisateur pas authentifié']));
-            return $response->withHeader('Content-Type', 'application/json')->withStatus(401);
-        }
+        $user = $request->getAttribute('user');
         $messages = Message::avoirMessagesParConversation(
             $args['id_advertisement'],
             $args['id_user'],
@@ -142,26 +126,5 @@ class MessageController
         $response->getBody()->write(json_encode(['message' => 'Conversation supprimée avec succès']));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
-    /**
-     * Summary of getUtilisateurConnecte
-     * @param Request $request
-     */
-    private function getUtilisateurConnecte(Request $request)
-    {
-        $authHeader = $request->getHeaderLine('Authorization');
 
-        if (!$authHeader) {
-            return null;
-        }
-        $token = str_replace('Bearer ', '', $authHeader);
-
-        try {
-            $secret = "8f3c9c2b7a1d4e6f9c0b5a7d9e1f2c3a_super_secret_key_2026";
-            $decoded = JWT::decode($token, new Key($secret, 'HS256'));
-
-            return User::readById($decoded->id);
-        } catch (Exception $error) {
-            return null;
-        }
-    }
 }
