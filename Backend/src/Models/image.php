@@ -55,7 +55,7 @@ class Image
      * @param int $id_advertisement
      * @return array
      */
-    public function recupererImagesParAnnonce($id_advertisement)
+    public static function readByAdvertisementId($id_advertisement)
     {
         $pdo = PDOSingleton::getInstance()->getConnection();
         $stmt = $pdo->prepare("SELECT * FROM pictures WHERE id_advertisement = :id_advertisement");
@@ -69,7 +69,7 @@ class Image
      * @param int $id_picture
      * @return array
      */
-    public function recupererImageParId($id_picture)
+    public static function readById($id_picture)
     {
         $pdo = PDOSingleton::getInstance()->getConnection();
         $stmt = $pdo->prepare("SELECT * FROM pictures WHERE id_picture = :id_picture");

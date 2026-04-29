@@ -85,6 +85,7 @@ class MessageController
             $args['id_user'],
             $user['id_user']
         );
+
         foreach ($messages as $message) {
             if ($message['id_recipient'] == $user['id_user'] && !$message['read']) {
                 $msg = new Message(
@@ -99,9 +100,41 @@ class MessageController
                 );
                 $msg->marquerCommeLu();
             }
-            $response->getBody()->write(json_encode($messages));
-            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
         }
+        $response->getBody()->write(json_encode($messages));
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+    }
+    public function supprimerConversation(Request $request, Response $response, array $args)
+    {
+        $user = $this->getUtilisateurConnecte($request);
+        if (!$user) {
+            $response->getBody()->write(json_encode(['error' => 'Utilisateur pas authentifié']));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(401);
+        }
+        $messages = Message::avoirMessagesParConversation(
+            $args['id_advertisement'],
+            $args['id_user'],
+            $user['id_user']
+        );
+        if (empty($messages)) {
+            $response->getBody()->write(json_encode(['error' => 'Conversation pas trouvée']));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
+        }
+        foreach ($messages as $message) {
+            $msg = new Message(
+                $message['id_message'],
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            );
+            $msg->delete();
+        }
+        $response->getBody()->write(json_encode(['message' => 'Conversation supprimée avec succès']));
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
     /**
      * Summary of getUtilisateurConnecte
@@ -114,7 +147,6 @@ class MessageController
         if (!$authHeader) {
             return null;
         }
-
         $token = str_replace('Bearer ', '', $authHeader);
 
         try {
@@ -122,7 +154,7 @@ class MessageController
             $decoded = JWT::decode($token, new Key($secret, 'HS256'));
 
             return User::readById($decoded->id);
-        } catch (Exception $e) {
+        } catch (Exception $error) {
             return null;
         }
     }

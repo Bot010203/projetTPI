@@ -44,23 +44,6 @@ class User {
         ]);
         $this->id_user = $pdo->lastInsertId();
     }
-
-    /**
-     * Summary of Update permet de mettre à jour un user dans la base de données
-     * @return void
-     */
-    public function update() {
-        $pdo = PDOSingleton::getInstance()->getConnection();
-        $stmt = $pdo->prepare("UPDATE users SET login = :login, email = :email, password = :password, token = :token WHERE id_user = :id_user");
-        $stmt->execute([
-            ':id_user' => $this->id_user,
-            ':login' => $this->login,
-            ':email' => $this->email,
-            ':password' => password_hash($this->password, PASSWORD_BCRYPT),
-            ':token' => $this->token
-        ]);
-    }
-
     /**
      * Met à jour uniquement le token (A14 : appelé à chaque login)
      * @return void
@@ -72,27 +55,6 @@ class User {
             ':token' => $this->token,
             ':id_user' => $this->id_user
         ]);
-    }
-
-    /**
-     * Summary of Delete permet de supprimer un user dans la base de données
-     * @return void
-     */
-    public function delete() {
-        $pdo = PDOSingleton::getInstance()->getConnection();
-        $stmt = $pdo->prepare("DELETE FROM users WHERE id_user = :id_user");
-        $stmt->execute([':id_user' => $this->id_user]);
-    }
-
-    /**
-     * Summary of ReadAll permet de lire tous les users dans la base de données
-     * @return array
-     */
-    public static function readAll() {
-        $pdo = PDOSingleton::getInstance()->getConnection();
-        $stmt = $pdo->prepare("SELECT * FROM users");
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**

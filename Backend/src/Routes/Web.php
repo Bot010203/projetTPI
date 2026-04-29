@@ -3,6 +3,7 @@ namespace App\Routes;
 use App\Controllers\AuthController;
 use App\Controllers\AnnonceController;
 use App\Controllers\ImageController;
+use App\Controllers\MessageController;
 use Slim\App;
 final class Web
 {

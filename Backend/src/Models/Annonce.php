@@ -10,8 +10,6 @@ namespace App\Models;
 
 use App\Models\PDOSingleton;
 use PDO;
-use App\Models\User;
-use App\Models\Message;
 
 class Annonce {
     public $id_advertisement;
