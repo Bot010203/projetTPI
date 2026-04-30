@@ -20,13 +20,14 @@ final class Web
             return $response;
         });
 
-  
+
         $app->post('/login', [AuthController::class, 'login']);
         $app->post('/register', [AuthController::class, 'register']);
 
         $app->get('/annonces', [AnnonceController::class, 'recupererAnnonces']);
-        
-        $app->get('/annonces/{id}', [AnnonceController::class, 'recupererAnnoncesById']);
+        $app->get('/annonces/{id}', [AnnonceController::class, 'recupererAnnooncesById']);
+
+        $app->get('/annonces/{id}/images', [ImageController::class, 'recupererImages']);
 
         $app->group('', function ($group) {
 

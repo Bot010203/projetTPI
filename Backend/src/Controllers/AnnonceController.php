@@ -53,53 +53,56 @@ class AnnonceController
             $sort_order = 'DESC';
 
         //Requete sql pour les filtres
-        $sql = "SELECT * FROM advertisements  WHERE 1=1";
+        $sql = "SELECT a.*, 
+        (SELECT p.path FROM pictures p WHERE p.id_advertisement = a.id_advertisement LIMIT 1) AS thumbnail
+        FROM advertisements a
+        WHERE 1=1";
         $params = [];
 
         if ($title) {
-            $sql .= " AND title LIKE :title";
+            $sql .= " AND a.title LIKE :title";
             $params[':title'] = "%$title%";
         }
         if ($description) {
-            $sql .= " AND description LIKE :description";
+            $sql .= " AND a.description LIKE :description";
             $params[':description'] = "%$description%";
         }
         if (!is_null($sale) && $sale !== '') {
-            $sql .= " AND sale = :sale";
+            $sql .= " AND a.sale = :sale";
             $params[':sale'] = (int) $sale;
         }
         if ($location) {
-            $sql .= " AND location LIKE :location";
+            $sql .= " AND a.location LIKE :location";
             $params[':location'] = "%$location%";
         }
         if ($brand) {
-            $sql .= " AND brand LIKE :brand";
+            $sql .= " AND a.brand LIKE :brand";
             $params[':brand'] = "%$brand%";
         }
         if ($model) {
-            $sql .= " AND model LIKE :model";
+            $sql .= " AND a.model LIKE :model";
             $params[':model'] = "%$model%";
         }
 
         if ($price_min) {
-            $sql .= " AND price >= :price_min";
+            $sql .= " AND a.price >= :price_min";
             $params[':price_min'] = (float) $price_min;
         }
         if ($price_max) {
-            $sql .= " AND price <= :price_max";
+            $sql .= " AND a.price <= :price_max";
             $params[':price_max'] = (float) $price_max;
         }
         if ($year_min) {
-            $sql .= " AND year_first_registration >= :year_min";
+            $sql .= " AND a.year_first_registration >= :year_min";
             $params[':year_min'] = (int) $year_min;
         }
         if ($year_max) {
-            $sql .= " AND year_first_registration <= :year_max";
+            $sql .= " AND a.year_first_registration <= :year_max";
             $params[':year_max'] = (int) $year_max;
         }
 
 
-        $sql .= " ORDER BY $sort_by $sort_order";
+        $sql .= " ORDER BY a.$sort_by $sort_order";
 
         $stmt = $pdo->prepare($sql);
         $stmt->execute($params);

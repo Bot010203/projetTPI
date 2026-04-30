@@ -5,49 +5,133 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plateforme véhicules</title>
-
+    <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 </head>
+    
+<body class="bg-light">
 
-<body>
-
-    <header class="d-flex justify-content-end p-3">
+    <header class="d-flex justify-content-end p-3 bg-white border-bottom">
         <a href="pageConnexion.html" class="btn btn-outline-dark">
             Se connecter
         </a>
     </header>
 
-    <main class="container text-center py-5">
+    <main class="container py-5">
 
-        <h1 class="mb-4">
-            Bienvenue sur Plateforme d’annonces pour véhicules
+        <h1 class="text-center mb-4">
+            Bienvenue sur la Plateforme d'annonces pour véhicules
         </h1>
 
-        <div class="d-flex justify-content-center gap-2 flex-wrap">
-
-            <input type="text" class="form-control w-50 w-sm-75" placeholder="Rechercher...">
-
-            <button class="btn btn-dark">
+        <div class="d-flex justify-content-center gap-2 flex-wrap mb-4">
+            <input type="text" id="f-title" class="form-control w-50" placeholder="Rechercher par titre...">
+            <button class="btn btn-dark" onclick="chargerAnnonces()">
                 <i class="bi bi-search"></i>
             </button>
+        </div>
 
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row g-3">
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Type</label>
+                        <select class="form-select" id="f-sale">
+                            <option value="">Tous</option>
+                            <option value="1">Vente</option>
+                            <option value="0">Achat</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Marque</label>
+                        <input type="text" class="form-control" id="f-brand" placeholder="ex: BMW">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Modèle</label>
+                        <input type="text" class="form-control" id="f-model" placeholder="ex: Série 3">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Ville</label>
+                        <input type="text" class="form-control" id="f-location" placeholder="ex: Genève">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Prix min (CHF)</label>
+                        <input type="number" class="form-control" id="f-price-min" placeholder="0">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Prix max (CHF)</label>
+                        <input type="number" class="form-control" id="f-price-max" placeholder="100000">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Année min</label>
+                        <input type="number" class="form-control" id="f-year-min" placeholder="2000">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Année max</label>
+                        <input type="number" class="form-control" id="f-year-max" placeholder="2026">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Trier par</label>
+                        <select class="form-select" id="f-sort-by">
+                            <option value="date_publication">Date de publication</option>
+                            <option value="price">Prix</option>
+                            <option value="year_first_registration">Année</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Ordre</label>
+                        <select class="form-select" id="f-sort-order">
+                            <option value="DESC">Décroissant</option>
+                            <option value="ASC">Croissant</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button class="btn btn-dark w-100" onclick="chargerAnnonces()">
+                            <i class="bi bi-search me-1"></i> Rechercher
+                        </button>
+                    </div>
+
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button class="btn btn-outline-secondary w-100" onclick="resetFiltres()">
+                            <i class="bi bi-x me-1"></i> Réinitialiser
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <p class="text-muted mb-3">
+            <strong id="count-annonces">0</strong> annonce(s) trouvée(s)
+        </p>
+
+        <div id="liste-annonces">
+            <div class="text-center py-5">
+                <div class="spinner-border text-secondary" role="status"></div>
+                <p class="mt-2 text-muted">Chargement des annonces...</p>
+            </div>
         </div>
 
     </main>
+
     <footer class="bg-dark text-white mt-5">
         <div class="container py-4">
-
             <div class="row align-items-start">
-
                 <div class="col-md-4 text-md-start text-center mb-3">
                     <h5>Plateforme véhicules</h5>
-                    <p class="text-secondary mb-0">
-                        Trouvez et publiez des annonces de véhicules facilement.
-                    </p>
+                    <p class="text-secondary mb-0">Trouvez et publiez des annonces de véhicules facilement.</p>
                 </div>
-
                 <div class="col-md-4 text-center mb-3">
                     <h5>Navigation</h5>
                     <ul class="list-unstyled">
@@ -55,23 +139,15 @@
                         <li><a href="pageConnexion.html" class="text-white text-decoration-none">Se connecter</a></li>
                     </ul>
                 </div>
-
                 <div class="col-md-4 text-md-end text-center mb-3">
                     <h5>Contact</h5>
                     <p class="text-secondary mb-1">Email: contact@vehicules.com</p>
                     <p class="text-secondary mb-0">Téléphone: +00 000 00 00</p>
                 </div>
-
             </div>
-
             <hr class="border-secondary">
-
-            <div class="text-center text-secondary">
-                © 2026 Plateforme véhicules 
-            </div>
-
+            <div class="text-center text-secondary">© 2026 Plateforme véhicules</div>
         </div>
     </footer>
+    <script src="./Js/pagePrinciaple.js"></script>
 </body>
-
-</html>
