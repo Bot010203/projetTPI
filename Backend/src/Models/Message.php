@@ -43,7 +43,7 @@ class Message
     public function create()
     {
         $pdo = PDOSingleton::getInstance()->getConnection();
-        $stmt = $pdo->prepare("INSERT INTO messages (text, `timestamp`, `read`, id_sender, id_recipient, id_advertisement, original_message_id) VALUES (:text, :timestamp, :read, :id_sender, :id_recipient, :id_advertisement, :original_message_id)");
+        $stmt = $pdo->prepare("INSERT INTO Message (text, `timestamp`, `read`, id_sender, id_recipient, id_advertisement, original_message_id) VALUES (:text, :timestamp, :read, :id_sender, :id_recipient, :id_advertisement, :original_message_id)");
         $stmt->execute([
             ':text' => $this->text,
             ':timestamp' => $this->timestamp,
@@ -59,7 +59,7 @@ class Message
     public function delete()
     {
         $pdo = PDOSingleton::getInstance()->getConnection();
-        $stmt = $pdo->prepare("DELETE FROM messages WHERE id_message = :id_message");
+        $stmt = $pdo->prepare("DELETE FROM Message WHERE id_message = :id_message");
         $stmt->execute([':id_message' => $this->id_message]);
     }
     /**
@@ -69,7 +69,7 @@ class Message
     public function read()
     {
         $pdo = PDOSingleton::getInstance()->getConnection();
-        $stmt = $pdo->prepare("SELECT * FROM messages WHERE id_message = :id_message");
+        $stmt = $pdo->prepare("SELECT * FROM Message WHERE id_message = :id_message");
         $stmt->execute([':id_message' => $this->id_message]);
         $message = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -90,7 +90,7 @@ class Message
     public function readOriginal()
     {
         $pdo = PDOSingleton::getInstance()->getConnection();
-        $stmt = $pdo->prepare("SELECT * FROM messages WHERE original_message_id = :id_message");
+        $stmt = $pdo->prepare("SELECT * FROM Message WHERE original_message_id = :id_message");
         $stmt->execute([':id_message' => $this->id_message]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -101,32 +101,35 @@ class Message
     public function marquerCommeLu()
     {
         $pdo = PDOSingleton::getInstance()->getConnection();
-        $stmt = $pdo->prepare("UPDATE messages SET `read` = 1 WHERE id_message = :id_message");
+        $stmt = $pdo->prepare("UPDATE Message SET `read` = 1 WHERE id_message = :id_message");
         $stmt->execute([':id_message' => $this->id_message]);
     }
     public static function readByUserId($id_user)
     {
         $pdo = PDOSingleton::getInstance()->getConnection();
-        $stmt = $pdo->prepare("SELECT * FROM messages WHERE id_sender = :id_user OR id_recipient = :id_user ORDER BY timestamp DESC");
-        $stmt->execute([':id_user' => $id_user]);
+        $stmt = $pdo->prepare("SELECT * FROM Message WHERE id_sender = :id_user1 OR id_recipient = :id_user2 ORDER BY timestamp DESC");
+        $stmt->execute([
+            ':id_user1' => $id_user,
+            ':id_user2' => $id_user
+        ]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     public static function avoirConversations($id_user)
     {
         $pdo = PDOSingleton::getInstance()->getConnection();
         $stmt = $pdo->prepare("
-        SELECT messages.*, advertisements.title, users.login
-        FROM messages
-        JOIN advertisements ON advertisements.id_advertisement = messages.id_advertisement
-        JOIN users ON (messages.id_sender = :id_user1 AND users.id_user = messages.id_recipient)
-                   OR (messages.id_recipient = :id_user2 AND users.id_user = messages.id_sender)
-        WHERE messages.id_message IN (
+        SELECT Message.*, Advertisement.title, User.login
+        FROM Message
+        JOIN Advertisement ON Advertisement.id_advertisement = Message.id_advertisement
+        JOIN User ON (Message.id_sender = :id_user1 AND User.id_user = Message.id_recipient)
+                   OR (Message.id_recipient = :id_user2 AND User.id_user = Message.id_sender)
+        WHERE Message.id_message IN (
             SELECT MAX(id_message)
-            FROM messages
+            FROM Message
             WHERE id_sender = :id_user3 OR id_recipient = :id_user4
             GROUP BY id_advertisement
         )
-        ORDER BY messages.timestamp DESC
+        ORDER BY Message.timestamp DESC
     ");
         $stmt->execute([
             ':id_user1' => $id_user,
@@ -140,13 +143,13 @@ class Message
     {
         $pdo = PDOSingleton::getInstance()->getConnection();
         $stmt = $pdo->prepare("
-            SELECT messages.*, users.login
-            FROM messages
-            JOIN users ON users.id_user=messages.id_sender
-            WHERE messages.id_advertisement=:id_advertisement
-            AND ((messages.id_sender=:id_user1 AND messages.id_recipient= :id_user2)
-            OR (messages.id_sender = :id_user2b AND messages.id_recipient = :id_user1b))
-            ORDER BY messages.timestamp DESC
+            SELECT Message.*, User.login
+            FROM Message
+            JOIN User ON User.id_user=Message.id_sender
+            WHERE Message.id_advertisement=:id_advertisement
+            AND ((Message.id_sender=:id_user1 AND Message.id_recipient= :id_user2)
+            OR (Message.id_sender = :id_user2b AND Message.id_recipient = :id_user1b))
+            ORDER BY Message.timestamp DESC
         ");
         $stmt->execute([
             ':id_advertisement' => $id_advertisement,

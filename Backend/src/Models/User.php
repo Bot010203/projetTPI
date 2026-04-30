@@ -14,14 +14,16 @@ use PDO;
 /**
  * Summary of User classe user avec CRUD
  */
-class User {
+class User
+{
     public $id_user;
     public $email;
     public $login;
     public $password;
     public $token;
 
-    public function __construct($id_user, $login, $email, $password, $token) {
+    public function __construct($id_user, $login, $email, $password, $token)
+    {
         $this->id_user = $id_user;
         $this->login = $login;
         $this->email = $email;
@@ -33,9 +35,10 @@ class User {
      * Summary of Create permet de créer un user dans la base de données
      * @return void
      */
-    public function create() {
+    public function create()
+    {
         $pdo = PDOSingleton::getInstance()->getConnection();
-        $stmt = $pdo->prepare("INSERT INTO users (login, email, password, token) VALUES (:login, :email, :password, :token)");
+        $stmt = $pdo->prepare("INSERT INTO User (login, email, password, token) VALUES (:login, :email, :password, :token)");
         $stmt->execute([
             ':login' => $this->login,
             ':email' => $this->email,
@@ -48,9 +51,10 @@ class User {
      * Met à jour uniquement le token 
      * @return void
      */
-    public function updateToken() {
+    public function updateToken()
+    {
         $pdo = PDOSingleton::getInstance()->getConnection();
-        $stmt = $pdo->prepare("UPDATE users SET token = :token WHERE id_user = :id_user");
+        $stmt = $pdo->prepare("UPDATE User SET token = :token WHERE id_user = :id_user");
         $stmt->execute([
             ':token' => $this->token,
             ':id_user' => $this->id_user
@@ -62,9 +66,10 @@ class User {
      * @param int $id
      * @return array
      */
-    public static function readById($id) {
+    public static function readById($id)
+    {
         $pdo = PDOSingleton::getInstance()->getConnection();
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE id_user = :id");
+        $stmt = $pdo->prepare("SELECT * FROM User WHERE id_user = :id");
         $stmt->execute([':id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
@@ -74,9 +79,10 @@ class User {
      * @param string $email
      * @return array
      */
-    public static function readByEmail($email) {
+    public static function readByEmail($email)
+    {
         $pdo = PDOSingleton::getInstance()->getConnection();
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt = $pdo->prepare("SELECT * FROM User WHERE email = :email");
         $stmt->execute([':email' => $email]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
@@ -86,9 +92,10 @@ class User {
      * @param string $login
      * @return array
      */
-    public static function readByLogin($login) {
+    public static function readByLogin($login)
+    {
         $pdo = PDOSingleton::getInstance()->getConnection();
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE login = :login");
+        $stmt = $pdo->prepare("SELECT * FROM User WHERE login = :login");
         $stmt->execute([':login' => $login]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }

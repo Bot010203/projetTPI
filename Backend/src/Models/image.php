@@ -31,7 +31,7 @@ class Image
     public function ajouterImage()
     {
         $pdo = PDOSingleton::getInstance()->getConnection();
-        $stmt = $pdo->prepare("INSERT INTO pictures (path, id_advertisement) VALUES (:path, :id_advertisement)");
+        $stmt = $pdo->prepare("INSERT INTO Picture (path, id_advertisement) VALUES (:path, :id_advertisement)");
         $stmt->execute([
             ':path' => $this->path,
             ':id_advertisement' => $this->id_advertisement
@@ -45,7 +45,7 @@ class Image
     public function supprimerImage()
     {
         $pdo = PDOSingleton::getInstance()->getConnection();
-        $stmt = $pdo->prepare("DELETE FROM pictures WHERE id_picture = :id_picture");
+        $stmt = $pdo->prepare("DELETE FROM Picture WHERE id_picture = :id_picture");
         $stmt->execute([
             ':id_picture' => $this->id_picture
         ]);
@@ -58,7 +58,7 @@ class Image
     public static function readByAdvertisementId($id_advertisement)
     {
         $pdo = PDOSingleton::getInstance()->getConnection();
-        $stmt = $pdo->prepare("SELECT * FROM pictures WHERE id_advertisement = :id_advertisement");
+        $stmt = $pdo->prepare("SELECT * FROM Picture WHERE id_advertisement = :id_advertisement");
         $stmt->execute([
             ':id_advertisement' => $id_advertisement
         ]);
@@ -72,7 +72,7 @@ class Image
     public static function readById($id_picture)
     {
         $pdo = PDOSingleton::getInstance()->getConnection();
-        $stmt = $pdo->prepare("SELECT * FROM pictures WHERE id_picture = :id_picture");
+        $stmt = $pdo->prepare("SELECT * FROM Picture WHERE id_picture = :id_picture");
         $stmt->execute([
             ':id_picture' => $id_picture
         ]);

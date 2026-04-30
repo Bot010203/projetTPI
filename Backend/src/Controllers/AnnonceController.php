@@ -54,8 +54,8 @@ class AnnonceController
 
         //Requete sql pour les filtres
         $sql = "SELECT a.*, 
-        (SELECT p.path FROM pictures p WHERE p.id_advertisement = a.id_advertisement LIMIT 1) AS thumbnail
-        FROM advertisements a
+        (SELECT p.path FROM Picture p WHERE p.id_advertisement = a.id_advertisement LIMIT 1) AS thumbnail
+        FROM Advertisement a
         WHERE 1=1";
         $params = [];
 
