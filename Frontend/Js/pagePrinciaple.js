@@ -11,14 +11,30 @@ async function chargerAnnonces() {
     const sortBy = document.getElementById('f-sort-by').value;
     const sortOrd = document.getElementById('f-sort-order').value;
 
-    if (title != '') url += 'title=' + title + '&';
-    if (brand != '') url += 'brand=' + brand + '&';
-    if (model != '') url += 'model=' + model + '&';
-    if (priceMin != '') url += 'price_min=' + priceMin + '&';
-    if (priceMax != '') url += 'price_max=' + priceMax + '&';
-    if (sale != '') url += 'sale=' + sale + '&';
-    if (sortBy != '') url += 'sort_by=' + sortBy + '&';
-    if (sortOrd != '') url += 'sort_order=' + sortOrd + '&';
+    if (title != '') {
+        url += 'title=' + title + '&';
+    }
+    if (brand != '') {
+        url += 'brand=' + brand + '&';
+    }
+    if (model != '') {
+        url += 'model=' + model + '&';
+    }
+    if (priceMin != '') {
+        url += 'price_min=' + priceMin + '&';
+    }
+    if (priceMax != '') {
+        url += 'price_max=' + priceMax + '&';
+    }
+    if (sale != '') {
+        url += 'sale=' + sale + '&';
+    }
+    if (sortBy != '') {
+        url += 'sort_by=' + sortBy + '&';
+    }
+    if (sortOrd != '') {
+        url += 'sort_order=' + sortOrd + '&';
+    }
     afficherChargement();
 
     try {
