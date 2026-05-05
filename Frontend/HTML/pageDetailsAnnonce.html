@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détail annonce — Plateforme véhicules</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/Frontend/Style/detailsAnnonce.css">
+</head>
+
+<body>
+
+    <header>
+        <a href="pagePrincipale.html" class="btn">
+            <i class="bi bi-arrow-left"></i> Retour aux annonces
+        </a>
+        <div id="nav-buttons"></div>
+    </header>
+
+    <main>
+
+        <div id="chargement" class="chargement">
+            <div class="spinner"></div>
+            <p>Chargement...</p>
+        </div>
+
+        <div id="contenu" class="d-none">
+            <div class="detail-grid">
+
+                <div>
+                    <div class="carousel">
+                        <div class="carousel-inner" id="carousel-inner"></div>
+                        <button class="carousel-btn prev" onclick="changerSlide(-1)">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+                        <button class="carousel-btn next" onclick="changerSlide(1)">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header-row">
+                            <h2 id="titre"></h2>
+                            <span id="badge-type" class="badge"></span>
+                        </div>
+                        <div class="prix" id="prix"></div>
+
+                        <div class="section-title">Description</div>
+                        <p class="description" id="description"></p>
+
+                        <hr>
+
+                        <div class="infos-grid">
+                            <div class="info-item">
+                                <i class="bi bi-tag"></i>
+                                <div>
+                                    <div class="info-label">Marque</div>
+                                    <div class="info-value" id="marque"></div>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="bi bi-car-front"></i>
+                                <div>
+                                    <div class="info-label">Modèle</div>
+                                    <div class="info-value" id="modele"></div>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="bi bi-calendar"></i>
+                                <div>
+                                    <div class="info-label">Année</div>
+                                    <div class="info-value" id="annee"></div>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="bi bi-geo-alt"></i>
+                                <div>
+                                    <div class="info-label">Ville</div>
+                                    <div class="info-value" id="ville"></div>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="bi bi-clock"></i>
+                                <div>
+                                    <div class="info-label">Publié le</div>
+                                    <div class="info-value" id="date"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="contact-card">
+                        <h5>Contacter le vendeur</h5>
+
+                        <div id="bloc-non-connecte" class="d-none">
+                            <p>Connectez-vous pour envoyer un message.</p>
+                            <a href="pageConnexion.html" class="btn btn-dark btn-full">
+                                <i class="bi bi-box-arrow-in-right"></i> Se connecter
+                            </a>
+                        </div>
+
+                        <div id="bloc-connecte" class="d-none">
+                            <div id="msg-succes" class="alert alert-success d-none">Message envoyé !</div>
+                            <div id="msg-erreur" class="alert alert-danger d-none"></div>
+                            <label class="form-label">Votre message</label>
+                            <textarea id="message-text" rows="5"
+                                placeholder="Bonjour, est-ce que ce véhicule est encore disponible ?"></textarea>
+                            <button class="btn btn-dark btn-full" onclick="envoyerMessage()">
+                                <i class="bi bi-send"></i> Envoyer
+                            </button>
+                        </div>
+
+                        <div id="bloc-proprio" class="d-none">
+                            <p>C'est votre annonce.</p>
+                            <a href="pageGestionAnnonces.html" class="btn btn-outline btn-full">
+                                <i class="bi bi-pencil"></i> Gérer mes annonces
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="erreur" class="erreur d-none">
+            <i class="bi bi-exclamation-circle"></i>
+            <p>Annonce introuvable.</p>
+        </div>
+
+    </main>

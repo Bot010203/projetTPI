@@ -240,5 +240,12 @@ class AnnonceController
         $response->getBody()->write(json_encode(['message' => 'Annonce supprimée']));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
+    public function mesAnnonces(Request $request, Response $response)
+    {
+        $user = $request->getAttribute('user');
+        $annonces = Annonce::readByUserId($user['id_user']);
 
+        $response->getBody()->write(json_encode($annonces));
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+    }
 }

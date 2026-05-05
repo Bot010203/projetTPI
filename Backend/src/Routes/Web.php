@@ -32,9 +32,12 @@ final class Web
         $app->group('', function ($group) {
 
             // Annonces
+            $group->get('/mes-annonces', [AnnonceController::class, 'mesAnnonces']);
             $group->post('/annonces', [AnnonceController::class, 'creerAnnonce']);
             $group->put('/annonces/{id}', [AnnonceController::class, 'modifierAnnonce']);
             $group->delete('/annonces/{id}', [AnnonceController::class, 'supprimerAnnonce']);
+
+
 
             // Images
             $group->post('/annonces/{id}/images', [ImageController::class, 'ajouterImage']);

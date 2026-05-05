@@ -1,37 +1,29 @@
-
 const API = 'http://localhost:8000';
-async function creerCompte() {
-    const login = document.getElementById('login').value.trim();
+async function getConnected() {
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value.trim();
-    const confirmPassword = document.getElementById('confirm-password').value.trim();
-
-    if (!login || !email || !password || !confirmPassword) {
+    if (!email || !password) {
         displayErrorMessage('Tous les champs sont requis');
         return;
     }
-    if (password !== confirmPassword) {
-        displayErrorMessage('Les mots de passe ne sont pas identiques');
-        return;
-    }
     try {
-        const reponse = await fetch(`${API}/register`, {
+        const reponse = await fetch(`${API}/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ login, email, password, confirm_password: confirmPassword })
+            body: JSON.stringify({ email, password })
         });
         const data = await reponse.json();
         if (!reponse.ok) {
             displayErrorMessage(typeof data === 'string' ? data : data.message || data.error || 'Erreur');
             return;
         }
-        window.location.href = 'pageConnexion.html';
-    }
-    catch (error) {
-        displayErrorMessage('Erreur lors de la création du compte');
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('id_user', data.id_user);
+        window.location.href = 'pageAnnonce.html';
+    } catch (error) {
+        displayErrorMessage('Erreur lors de la connexion');
     }
 }
-
 function displayErrorMessage(message) {
     const msgErreur = document.getElementById('msg-erreur');
     msgErreur.textContent = message;

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plateforme véhicules</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/Frontend/Style/pageAnnonce.css">
+</head>
+
+<body>
+
+    <header>
+        <a href="pageGestionAnnonces.html" class="btn">Gérer mes annonces</a>
+        <a href="pageConversations.html" class="btn">Gérer mes conversations</a>
+    </header>
+
+    <main>
+        <h1>Bienvenue <!--nom de l'utilisateur--> sur la Plateforme d'annonces pour véhicules</h1>
+
+        <div class="search-bar">
+            <input type="text" id="f-title" placeholder="Rechercher par titre...">
+            <button class="btn btn-dark" onclick="chargerAnnonces()">
+                <i class="bi bi-search"></i>
+            </button>
+        </div>
+
+        <div class="filtres">
+            <div class="filtres-grid">
+
+                <div class="filtre-item">
+                    <label>Type</label>
+                    <select id="f-sale">
+                        <option value="">Tous</option>
+                        <option value="1">Vente</option>
+                        <option value="0">Achat</option>
+                    </select>
+                </div>
+
+                <div class="filtre-item">
+                    <label>Marque</label>
+                    <input type="text" id="f-brand" placeholder="ex: BMW">
+                </div>
+
+                <div class="filtre-item">
+                    <label>Modèle</label>
+                    <input type="text" id="f-model" placeholder="ex: Série 3">
+                </div>
+
+                <div class="filtre-item">
+                    <label>Ville</label>
+                    <input type="text" id="f-location" placeholder="ex: Genève">
+                </div>
+
+                <div class="filtre-item">
+                    <label>Prix min (CHF)</label>
+                    <input type="number" id="f-price-min" placeholder="0">
+                </div>
+
+                <div class="filtre-item">
+                    <label>Prix max (CHF)</label>
+                    <input type="number" id="f-price-max" placeholder="100000">
+                </div>
+
+                <div class="filtre-item">
+                    <label>Année min</label>
+                    <input type="number" id="f-year-min" placeholder="2000">
+                </div>
+
+                <div class="filtre-item">
+                    <label>Année max</label>
+                    <input type="number" id="f-year-max" placeholder="2026">
+                </div>
+
+                <div class="filtre-item">
+                    <label>Trier par</label>
+                    <select id="f-sort-by">
+                        <option value="date_publication">Date de publication</option>
+                        <option value="price">Prix</option>
+                        <option value="year_first_registration">Année</option>
+                    </select>
+                </div>
+
+                <div class="filtre-item">
+                    <label>Ordre</label>
+                    <select id="f-sort-order">
+                        <option value="DESC">Décroissant</option>
+                        <option value="ASC">Croissant</option>
+                    </select>
+                </div>
+
+                <div class="filtre-item align-end">
+                    <button class="btn btn-dark" onclick="chargerAnnonces()">
+                        <i class="bi bi-search"></i> Rechercher
+                    </button>
+                </div>
+
+                <div class="filtre-item align-end">
+                    <button class="btn btn-secondary" onclick="resetFiltres()">
+                        <i class="bi bi-x"></i> Réinitialiser
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <p class="compteur"><strong id="count-annonces">0</strong> annonce(s) trouvée(s)</p>
+
+        <div id="liste-annonces">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Chargement des annonces...</p>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="footer-inner">
+            <div>
+                <h5>Plateforme véhicules</h5>
+                <p>Trouvez et publiez des annonces de véhicules facilement.</p>
+            </div>
+            <div>
+                <h5>Navigation</h5>
+                <ul>
+                    <li><a href="#">Accueil</a></li>
+                    <li><a href="pageConnexion.html">Se connecter</a></li>
+                </ul>
+            </div>
+            <div class="footer-right">
+                <h5>Contact</h5>
+                <p>Email: contact@vehicules.com</p>
+                <p>Téléphone: +00 000 00 00</p>
+            </div>
+        </div>
+        <div class="footer-bottom">© 2026 Plateforme véhicules</div>
+    </footer>
+
+    <script src="/Frontend/Js/pagePrincipale.js"></script>
+</body>
+
+</html>

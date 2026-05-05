@@ -114,8 +114,13 @@ class Message
         ]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    /**
+     * Summary of avoirConversations
+     * @param mixed $id_user
+     */
     public static function avoirConversations($id_user)
     {
+        //aide IA pour faire la requete
         $pdo = PDOSingleton::getInstance()->getConnection();
         $stmt = $pdo->prepare("
         SELECT Message.*, Advertisement.title, User.login
@@ -139,6 +144,12 @@ class Message
         ]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    /**
+     * Summary of avoirMessagesParConversation
+     * @param mixed $id_advertisement
+     * @param mixed $id_user1
+     * @param mixed $id_user2
+     */
     public static function avoirMessagesParConversation($id_advertisement, $id_user1, $id_user2)
     {
         $pdo = PDOSingleton::getInstance()->getConnection();
