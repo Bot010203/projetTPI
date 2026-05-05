@@ -1,4 +1,11 @@
 <?php
+/**
+ * Nom du projet : ProjetTPI
+ * Auteur : Paul Chiacchiari
+ * Date : 22.04.2026
+ * Nom fichier : Web.php
+ * But : Classe Web avec les méthodes pour gérer les routes du site web
+ */
 namespace App\Routes;
 use App\Controllers\AuthController;
 use App\Controllers\AnnonceController;

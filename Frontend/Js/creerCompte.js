@@ -1,4 +1,10 @@
-
+/*
+* Nom du projet : ProjetTPI
+* Auteur : Paul Chiacchiari
+* Date : 22.04.2026
+* Nom fichier : creerCompte.js
+* But : Script pour gérer la création de compte sur la plateforme
+*/
 const API = 'http://localhost:8000';
 async function createAccount() {
     const login = document.getElementById('login').value.trim();

@@ -1,3 +1,10 @@
+/*
+* Nom du projet : ProjetTPI
+* Auteur : Paul Chiacchiari
+* Date : 22.04.2026
+* Nom fichier : pageConnexion.js
+* But : Script pour gérer la connexion de l'utilisateur sur la plateforme
+*/
 const API = 'http://localhost:8000';
 async function getConnected() {
     const email = document.getElementById('email').value.trim();

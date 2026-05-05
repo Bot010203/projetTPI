@@ -1,3 +1,10 @@
+/*
+* Nom du projet : ProjetTPI
+* Auteur : Paul Chiacchiari
+* Date : 22.04.2026
+* Nom fichier : pageGestionAnnonces.js
+* But : Script pour gérer la gestion des annonces de l'utilisateur
+*/
 const API_URL = 'http://localhost:8000';
 
 let annonceEnEditionId = null;

@@ -1,3 +1,10 @@
+/*
+* Nom du projet : ProjetTPI
+* Auteur : Paul Chiacchiari
+* Date : 22.04.2026
+* Nom fichier : pageGestionConversation.js
+* But : Script pour gérer la gestion des conversations de l'utilisateur
+*/
 const API = 'http://localhost:8000';
 const idUser = parseInt(localStorage.getItem('id_user'));
 let conversationActive = null;

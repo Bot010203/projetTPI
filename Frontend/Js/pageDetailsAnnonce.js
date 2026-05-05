@@ -1,3 +1,10 @@
+/*
+* Nom du projet : ProjetTPI
+* Auteur : Paul Chiacchiari
+* Date : 22.04.2026
+* Nom fichier : pageDetailsAnnonce.js
+* But : Script pour gérer l'affichage des détails d'une annonce
+*/
 const API_URL = 'http://localhost:8000';
 
 // Récupérer l'id de l'annonce depuis l'URL

@@ -1,3 +1,10 @@
+/*
+* Nom du projet : ProjetTPI
+* Auteur : Paul Chiacchiari
+* Date : 22.04.2026
+* Nom fichier : pagePrincipale.js
+* But : Script pour gérer l'affichage des annonces sur la page principale
+*/
 const API = 'http://localhost:8000';
 
 async function loadAds() {
