@@ -13,9 +13,9 @@
     <header>
         <h1><i class="bi bi-chat-dots"></i> Mes conversations</h1>
         <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-            <a href="index.html" class="btn"><i class="bi bi-arrow-left"></i> Accueil</a>
+            <a href="pageAnnonce.html" class="btn"><i class="bi bi-arrow-left"></i> Accueil</a>
             <a href="pageGestionAnnonces.html" class="btn"><i class="bi bi-megaphone"></i> Mes annonces</a>
-            <button class="btn btn-danger" onclick="deconnexion()"><i class="bi bi-box-arrow-right"></i>
+            <button class="btn btn-danger" onclick="logout()"><i class="bi bi-box-arrow-right"></i>
                 Déconnexion</button>
         </div>
     </header>
@@ -40,14 +40,16 @@
         <div id="page-detail" class="detail-conversation">
 
             <div class="detail-header">
-                <button class="btn btn-sm" onclick="retourListe()">
+                <button class="btn btn-sm" onclick="goBackToList()">
                     <i class="bi bi-arrow-left"></i> Retour
                 </button>
+
                 <div>
                     <h3 id="detail-sujet"></h3>
                     <p id="detail-correspondant"></p>
                 </div>
-                <button class="btn btn-danger btn-sm" onclick="ouvrirModalSupprimer()" style="margin-left:auto;">
+
+                <button class="btn btn-danger btn-sm" onclick="openDeleteModal()" style="margin-left:auto;">
                     <i class="bi bi-trash"></i> Supprimer
                 </button>
             </div>
@@ -59,8 +61,9 @@
             <div class="form-reponse">
                 <label>Répondre</label>
                 <textarea id="texte-reponse" rows="3" placeholder="Votre message..."></textarea>
+
                 <div class="form-reponse-footer">
-                    <button class="btn btn-dark" onclick="envoyerReponse()">
+                    <button class="btn btn-dark" onclick="sendReply()">
                         <i class="bi bi-send"></i> Envoyer
                     </button>
                 </div>
@@ -79,7 +82,7 @@
             <div>
                 <h5>Navigation</h5>
                 <ul>
-                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="pageAnnonce.html">Accueil</a></li>
                     <li><a href="pageConnexion.html">Se connecter</a></li>
                 </ul>
             </div>
@@ -96,9 +99,10 @@
         <div class="modal">
             <h3>Supprimer la conversation</h3>
             <p>Êtes-vous sûr de vouloir supprimer cette conversation ? Cette action est irréversible.</p>
+
             <div class="modal-footer">
-                <button class="btn" onclick="fermerModalSupprimer()">Annuler</button>
-                <button class="btn btn-danger" onclick="confirmerSuppression()">
+                <button class="btn" onclick="closeDeleteModal()">Annuler</button>
+                <button class="btn btn-danger" onclick="confirmDeleteConversation()">
                     <i class="bi bi-trash"></i> Supprimer
                 </button>
             </div>
@@ -107,3 +111,5 @@
 
     <script src="/Frontend/Js/pageGestionConversation.js"></script>
 </body>
+
+</html>

@@ -22,6 +22,7 @@ async function getConnected() {
         }
         localStorage.setItem('token', data.token);
         localStorage.setItem('id_user', data.id_user);
+        localStorage.setItem('login',   data.login);  
         window.location.href = 'pageAnnonce.html';
     } catch (error) {
         displayErrorMessage('Erreur lors de la connexion');

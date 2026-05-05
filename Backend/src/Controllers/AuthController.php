@@ -49,7 +49,8 @@ class AuthController
 
         return $this->send($response, [
             'token' => $token,
-            'id_user' => $user['id_user']  
+            'id_user' => $user['id_user'],
+            'login' => $user['login']
         ]);
     }
 

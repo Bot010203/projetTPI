@@ -198,5 +198,17 @@ function resetFiltres() {
     document.getElementById('year-max').value = '';
     loadAds();
 }
+function loginUser() {
+     const token = localStorage.getItem('token');
+    const login = localStorage.getItem('login');
 
+    const h1 = document.querySelector('h1');
+
+    if (token && login) {
+        h1.textContent = `Bienvenue ${login} sur la Plateforme d'annonces pour véhicules`;
+    } else {
+        h1.textContent = "Bienvenue sur la Plateforme d'annonces pour véhicules";
+    }
+}
+loginUser();
 loadAds();

@@ -39,6 +39,15 @@ class MessageController
             $response->getBody()->write(json_encode(['error' => 'Champ text obligatoire']));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
         }
+        if ((int) $user['id_user'] === (int) $annonce['id_user']) {
+            $id_recipient = (int) ($data['id_recipient'] ?? 0);
+            if (!$id_recipient) {
+                $response->getBody()->write(json_encode(['error' => 'Destinataire manquant']));
+                return $response->withHeader('Content-Type', 'application/json')->withStatus(422);
+            }
+        } else {
+            $id_recipient = (int) $annonce['id_user'];
+        }
         $message = new Message(
             null,
             $data['text'],

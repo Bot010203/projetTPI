@@ -171,7 +171,7 @@ function updateNavbar() {
     if (token) {
         nav.innerHTML = `
             <a href="pageGestionAnnonces.html" class="btn">Mes annonces</a>
-            <a href="pageConversations.html" class="btn">Messages</a>
+            <a href="pageGestionConversations.html" class="btn">Messages</a>
             <button class="btn btn-danger" onclick="logout()">Déconnexion</button>
         `;
     } else {
