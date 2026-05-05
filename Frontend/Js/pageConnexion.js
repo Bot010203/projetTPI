@@ -2,10 +2,12 @@ const API = 'http://localhost:8000';
 async function getConnected() {
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value.trim();
+    //Vérification des champs
     if (!email || !password) {
         displayErrorMessage('Tous les champs sont requis');
         return;
     }
+    //Appel à l'API pour se connecter
     try {
         const reponse = await fetch(`${API}/login`, {
             method: 'POST',
@@ -14,6 +16,7 @@ async function getConnected() {
         });
         const data = await reponse.json();
         if (!reponse.ok) {
+            //Affichage de l'erreur retournée par l'API ou d'un message générique
             displayErrorMessage(typeof data === 'string' ? data : data.message || data.error || 'Erreur');
             return;
         }

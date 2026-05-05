@@ -1,20 +1,23 @@
 const API = 'http://localhost:8000';
 
-async function chargerAnnonces() {
+async function loadAds() {
+    //Avoir l'URL + un parametre
     let url = API + '/annonces?';
 
-    const title = document.getElementById('f-title').value;
-    const brand = document.getElementById('f-brand').value;
-    const model = document.getElementById('f-model').value;
-    const priceMin = document.getElementById('f-price-min').value;
-    const priceMax = document.getElementById('f-price-max').value;
-    const sale = document.getElementById('f-sale').value;
-    const sortBy = document.getElementById('f-sort-by').value;
-    const sortOrd = document.getElementById('f-sort-order').value;
-    const location = document.getElementById('f-location').value;
-    const yearMin = document.getElementById('f-year-min').value;
-    const yearMax = document.getElementById('f-year-max').value;
+    //Récuperer les valeurs des filtres
+    const title = document.getElementById('title').value;
+    const brand = document.getElementById('brand').value;
+    const model = document.getElementById('model').value;
+    const priceMin = document.getElementById('price-min').value;
+    const priceMax = document.getElementById('price-max').value;
+    const sale = document.getElementById('sale').value;
+    const sortBy = document.getElementById('sort-by').value;
+    const sortOrd = document.getElementById('sort-order').value;
+    const location = document.getElementById('location').value;
+    const yearMin = document.getElementById('year-min').value;
+    const yearMax = document.getElementById('year-max').value;
 
+    //Ajouter les paramètres à l'URL dynamiquement 
     if (title) {
         url += 'title=' + title + '&';
     }
@@ -49,18 +52,18 @@ async function chargerAnnonces() {
         url += 'year_max=' + yearMax + '&';
     }
 
-    afficherChargement();
+    showLoading();
 
     try {
         const reponse = await fetch(url);
         const annonces = await reponse.json();
-        afficherAnnonces(annonces);
+        renderAds(annonces);
     } catch (error) {
-        afficherErreur();
+        showError();
     }
 }
 
-function afficherChargement() {
+function showLoading() {
     document.getElementById('liste-annonces').innerHTML = `
         <div class="loading">
             <div class="spinner"></div>
@@ -68,12 +71,12 @@ function afficherChargement() {
         </div>`;
 }
 
-function afficherErreur() {
+function showError() {
     document.getElementById('liste-annonces').innerHTML =
         `<div class="error"><p>Erreur lors du chargement</p></div>`;
 }
 
-function afficherAnnonces(annonces) {
+function renderAds(annonces) {
     document.getElementById('count-annonces').textContent = annonces.length;
 
     if (annonces.length === 0) {
@@ -84,58 +87,116 @@ function afficherAnnonces(annonces) {
 
     let html = '<div class="annonces-grid">';
     for (let i = 0; i < annonces.length; i++) {
-        html += carteAnnonce(annonces[i]);
+        html += createAdCard(annonces[i]);
     }
     html += '</div>';
     document.getElementById('liste-annonces').innerHTML = html;
 }
+//Aide avec ia pour la création de la carte d'annonce
+function createAdCard(annonce) {
 
-function carteAnnonce(annonce) {
-    const prix = annonce.price ? parseFloat(annonce.price).toLocaleString('fr-CH') + ' CHF' : 'Prix non défini';
-    const date = new Date(annonce.date_publication).toLocaleDateString('fr-CH');
-    const badge = annonce.sale == 1
-        ? '<span class="badge badge-vente">Vente</span>'
-        : '<span class="badge badge-achat">Achat</span>';
+    let prix;
 
-    const img = annonce.thumbnail
-        ? `<img src="${API}${annonce.thumbnail}" alt="${annonce.title}">`
-        : `<div class="card-placeholder"><i class="bi bi-car-front"></i></div>`;
+    if (annonce.price) {
+        prix = parseFloat(annonce.price).toLocaleString('fr-CH') + ' CHF';
+    } else {
+        prix = 'Prix non défini';
+    }
+
+
+    let date = new Date(annonce.date_publication).toLocaleDateString('fr-CH');
+
+
+    let badge;
+
+    if (annonce.sale == 1) {
+        badge = '<span class="badge badge-vente">Vente</span>';
+    } else {
+        badge = '<span class="badge badge-achat">Achat</span>';
+    }
+
+
+    let img;
+
+    if (annonce.thumbnail) {
+        img = `<img src="${API}${annonce.thumbnail}" alt="${annonce.title}">`;
+    } else {
+        img = `<div class="card-placeholder"><i class="bi bi-car-front"></i></div>`;
+    }
+
+
+    let description;
+
+    if (annonce.description) {
+        description = annonce.description;
+    } else {
+        description = 'Aucune description';
+    }
+
+
+    let locationHTML = '';
+
+    if (annonce.location) {
+        locationHTML = '<span><i class="bi bi-geo-alt"></i> ' + annonce.location + '</span>';
+    }
+
+    let brandHTML = '';
+
+    if (annonce.brand) {
+        let modele = '';
+
+        if (annonce.model) {
+            modele = annonce.model;
+        }
+
+        brandHTML = '<span><i class="bi bi-tag"></i> ' + annonce.brand + ' ' + modele + '</span>';
+    }
+
+    let yearHTML = '';
+
+    if (annonce.year_first_registration) {
+        yearHTML = '<span><i class="bi bi-calendar"></i> ' + annonce.year_first_registration + '</span>';
+    }
+
 
     return `
-    <a href="pageAnnonce.html?id=${annonce.id_advertisement}" class="card-link">
+        <a href="pageDetailsAnnonce.html?id=${annonce.id_advertisement}" class="card-link">
         <div class="card">
             ${img}
+
             <div class="card-body">
                 ${badge}
                 <div class="card-title">${annonce.title}</div>
-                <div class="card-desc">${annonce.description || 'Aucune description'}</div>
+                <div class="card-desc">${description}</div>
+
                 <div class="card-meta">
-                    ${annonce.location ? '<span><i class="bi bi-geo-alt"></i> ' + annonce.location + '</span>' : ''}
-                    ${annonce.brand ? '<span><i class="bi bi-tag"></i> ' + annonce.brand + ' ' + (annonce.model || '') + '</span>' : ''}
-                    ${annonce.year_first_registration ? '<span><i class="bi bi-calendar"></i> ' + annonce.year_first_registration + '</span>' : ''}
+                    ${locationHTML}
+                    ${brandHTML}
+                    ${yearHTML}
                 </div>
             </div>
+
             <div class="card-footer">
                 <span class="card-price">${prix}</span>
                 <span class="card-date">${date}</span>
             </div>
         </div>
-    </a>`;
+        </a>`;
 }
-
+//reset les filtres et recharge les annonces
 function resetFiltres() {
-    document.getElementById('f-title').value = '';
-    document.getElementById('f-brand').value = '';
-    document.getElementById('f-model').value = '';
-    document.getElementById('f-price-min').value = '';
-    document.getElementById('f-price-max').value = '';
-    document.getElementById('f-sale').value = '';
-    document.getElementById('f-sort-by').value = 'date_publication';
-    document.getElementById('f-sort-order').value = 'DESC';
-    document.getElementById('f-location').value = '';
-    document.getElementById('f-year-min').value = '';
-    document.getElementById('f-year-max').value = '';
-    chargerAnnonces();
+    document.getElementById('title').value = '';
+    document.getElementById('brand').value = '';
+    document.getElementById('model').value = '';
+    document.getElementById('price-min').value = '';
+    document.getElementById('price-max').value = '';
+    document.getElementById('sale').value = '';
+    document.getElementById('sort-by').value = 'date_publication';
+    document.getElementById('sort-order').value = 'DESC';
+    document.getElementById('location').value = '';
+    document.getElementById('year-min').value = '';
+    document.getElementById('year-max').value = '';
+    loadAds();
 }
 
-chargerAnnonces();
+loadAds();

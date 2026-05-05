@@ -1,95 +1,351 @@
-const API = 'http://localhost:8000';
-let modifierAnnonceId = null;
-let supprimerAnnonceId = null;
-function inisialiserPage() {
+const API_URL = 'http://localhost:8000';
+
+let annonceEnEditionId = null;
+let annonceASupprimerId = null;
+
+function initPage() {
     const token = localStorage.getItem('token');
+    // Vérification de l'authentification
     if (!token) {
-        window.location.href = 'pageConnexion.html';
+        redirectToLogin();
         return;
     }
-    chargerAnnonces();
+
+    loadMyAds();
 }
-async function chargerMesAnnonces() {
+
+async function loadMyAds() {
     const token = localStorage.getItem('token');
+
     try {
-        const reponse = await fetch(`${API}/mes-annonces`, {
+        const response = await fetch(`${API_URL}/mes-annonces`, {
             headers: { 'Authorization': 'Bearer ' + token }
         });
-        const annonces = await reponse.json();
-        afficherAnnonces(annonces);
+
+        const annonces = await response.json();
+        renderAdsList(annonces);
+
     } catch (error) {
-        afficherErreur();
-        document.getElementById('liste-annonces').innerHTML = '';
-        '<div class="error"><p>Erreur lors du chargement</p></div>';
+        showLoadError();
     }
 }
-function afficherAnnonces(annonces) {
+
+function renderAdsList(annonces) {
     document.getElementById('count-annonces').textContent = annonces.length;
+    // Afficher un message si aucune annonce n'est trouvée
     if (annonces.length === 0) {
-        document.getElementById('liste-annonces').innerHTML = `
-            <div class="empty">
-                <i class="bi bi-megaphone" style="font-size:3rem; display:block; margin-bottom:1rem; opacity:0.3;"></i>
-                <p>Vous n'avez pas encore d'annonces.</p>
-                <button class="btn btn-dark" style="margin-top:1rem;" onclick="ouvrirModalCreer()">
-                    <i class="bi bi-plus-lg"></i> Créer ma première annonce
-                </button>
-            </div>`;
+        renderEmptyAds();
         return;
     }
-    let htmlAffichage = '<div class="annonces-grid">';
-    annonces.forEach(annonce => {
-        htmlAffichage += carteAnnonce(annonce);
-    });
-    htmlAffichage += '</div>';
-    document.getElementById('liste-annonces').innerHTML = htmlAffichage;
+
+    let html = '';
+    for (let i = 0; i < annonces.length; i++) {
+        html += createAdCard(annonces[i]);
+    }
+
+    document.getElementById('liste-annonces').innerHTML =
+        `<div class="annonces-grid">${html}</div>`;
 }
 
-//aider avec ia pour faire cette fonction 
-function carteAnnonce(annonce) {
-    const prix = annonce.price ? parseFloat(annonce.price).toLocaleString('fr-CH') + ' CHF' : 'Prix non défini';
-    const date = new Date(annonce.date_publication).toLocaleDateString('fr-CH');
-    const badge = annonce.sale == 1
-        ? '<span class="badge badge-vente">Vente</span>'
-        : '<span class="badge badge-achat">Achat</span>';
+function renderEmptyAds() {
+    document.getElementById('liste-annonces').innerHTML = `
+        <div class="empty">
+            <i class="bi bi-megaphone" style="font-size:3rem;"></i>
+            <p>Vous n'avez pas encore d'annonces.</p>
+            <button class="btn btn-dark" onclick="openCreateAdModal()">
+                <i class="bi bi-plus-lg"></i> Créer une annonce
+            </button>
+        </div>`;
+}
+//Aide avec Ia pour la création de la carte d'annonce
+function createAdCard(annonce) {
+    const prix = formatPrice(annonce.price);
+    const date = formatDate(annonce.date_publication);
+    const badge = createBadge(annonce.sale);
+    const image = createImage(annonce);
 
-    const img = annonce.thumbnail
-        ? `<img src="${API}${annonce.thumbnail}" alt="${annonce.title}">`
-        : `<div class="card-placeholder"><i class="bi bi-car-front"></i></div>`;
+    let description = annonce.description;
+    if (!description) {
+        description = 'Aucune description';
+    }
+
+    let locationHTML = '';
+    if (annonce.location) {
+        locationHTML = `<span><i class="bi bi-geo-alt"></i> ${annonce.location}</span>`;
+    }
+
+    let brandHTML = '';
+    if (annonce.brand) {
+        let modele = annonce.model;
+        if (!modele) {
+            modele = '';
+        }
+        brandHTML = `<span><i class="bi bi-tag"></i> ${annonce.brand} ${modele}</span>`;
+    }
+
+    let yearHTML = '';
+    if (annonce.year_first_registration) {
+        yearHTML = `<span><i class="bi bi-calendar"></i> ${annonce.year_first_registration}</span>`;
+    }
 
     return `
     <div class="card">
-        <a href="pageAnnonce.html?id=${annonce.id_advertisement}" style="text-decoration:none; color:inherit;">
-            ${img}
+        <a href="pageDetailsAnnonce.html?id=${annonce.id_advertisement}">
+            ${image}
             <div class="card-body">
                 ${badge}
                 <div class="card-title">${annonce.title}</div>
-                <div class="card-desc">${annonce.description || 'Aucune description'}</div>
+                <div class="card-desc">${description}</div>
                 <div class="card-meta">
-                    ${annonce.location ? '<span><i class="bi bi-geo-alt"></i> ' + annonce.location + '</span>' : ''}
-                    ${annonce.brand ? '<span><i class="bi bi-tag"></i> ' + annonce.brand + ' ' + (annonce.model || '') + '</span>' : ''}
-                    ${annonce.year_first_registration ? '<span><i class="bi bi-calendar"></i> ' + annonce.year_first_registration + '</span>' : ''}
+                    ${locationHTML}
+                    ${brandHTML}
+                    ${yearHTML}
                 </div>
             </div>
             <div class="card-footer">
-                <span class="card-price">${prix}</span>
-                <span class="card-date">${date}</span>
+                <span>${prix}</span>
+                <span>${date}</span>
             </div>
         </a>
+
         <div class="card-actions">
-            <button class="btn btn-warning btn-sm" onclick="ouvrirModalModifier(${annonce.id_advertisement})">
-                <i class="bi bi-pencil"></i> Modifier
+            <button class="btn btn-warning btn-sm" onclick="openEditAdModal(${annonce.id_advertisement})">
+                Modifier
             </button>
-            <button class="btn btn-danger btn-sm" onclick="ouvrirModalSupprimer(${annonce.id_advertisement})">
-                <i class="bi bi-trash"></i> Supprimer
+            <button class="btn btn-danger btn-sm" onclick="openDeleteAdModal(${annonce.id_advertisement})">
+                Supprimer
             </button>
         </div>
     </div>`;
 }
-function creer()
+
+function formatPrice(prix) 
+// Formater le prix  avec séparation des milliers
 {
-    modifierAnnonceId = null;
-    document.getElementById('modal-title').textContent = 'Créer une annonce';
-    viderFormulaire();
-    document.getElementById('modal-annonce').classList.add('active');
-    document.getElementById('modal-error').classList.add('d-none');
+    if (prix) {
+        return parseFloat(prix).toLocaleString('fr-CH') + ' CHF';
+    }
+    return 'Prix non défini';
 }
+
+function formatDate(date) {
+    // Formater la date 
+    return new Date(date).toLocaleDateString('fr-CH');
+}
+
+function createBadge(estVente) {
+    if (estVente == 1) {
+        return '<span class="badge badge-vente">Vente</span>';
+    } else {
+        return '<span class="badge badge-achat">Achat</span>';
+    }
+}
+
+function createImage(annonce) {
+    // Afficher l'image de l'annonce ou un placeholder
+    if (annonce.thumbnail) {
+        return `<img src="${API_URL}${annonce.thumbnail}" alt="${annonce.title}">`;
+    }
+
+    return `<div class="card-placeholder"><i class="bi bi-car-front"></i></div>`;
+}
+
+function openCreateAdModal() {
+    annonceEnEditionId = null;
+    openAdModal('Nouvelle annonce');
+}
+
+async function openEditAdModal(idAnnonce) {
+    annonceEnEditionId = idAnnonce;
+    openAdModal('Modifier l\'annonce');
+
+    try {
+        const response = await fetch(`${API_URL}/annonces/${idAnnonce}`);
+        const annonce = await response.json();
+
+        fillForm(annonce);
+
+    } catch {
+        showGlobalMessage('Impossible de charger l\'annonce', 'danger');
+    }
+}
+
+function openAdModal(titre) {
+    // Ouvrir le modal de création/édition d'annonce
+    document.getElementById('modal-titre').textContent = titre;
+    document.getElementById('modal-erreur').classList.add('d-none');
+    document.getElementById('modal-annonce').classList.add('active');
+}
+
+function fillForm(a) {
+    // Remplir le formulaire avec les données de l'annonce
+    document.getElementById('m-title').value = a.title || '';
+    document.getElementById('m-description').value = a.description || '';
+    document.getElementById('m-sale').value = a.sale ?? '1';
+    document.getElementById('m-location').value = a.location || '';
+    document.getElementById('m-brand').value = a.brand || '';
+    document.getElementById('m-model').value = a.model || '';
+    document.getElementById('m-price').value = a.price || '';
+    document.getElementById('m-year').value = a.year_first_registration || '';
+}
+
+async function saveAd() {
+    const token = localStorage.getItem('token');
+    const titre = document.getElementById('m-title').value.trim();
+
+    if (!titre) {
+        showModalError('Le titre est obligatoire');
+        return;
+    }
+
+    const data = getFormData();
+
+    let url;
+    let method;
+
+    if (annonceEnEditionId) {
+        url = `${API_URL}/annonces/${annonceEnEditionId}`;
+        method = 'PUT';
+    } else {
+        url = `${API_URL}/annonces`;
+        method = 'POST';
+    }
+
+    try {
+        const response = await fetch(url, {
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            let message = result.error;
+            if (!message) {
+                message = 'Erreur';
+            }
+            showModalError(message);
+            return;
+        }
+
+        closeAdModal();
+        showGlobalMessage('Annonce sauvegardée !', 'success');
+        loadMyAds();
+
+    } catch {
+        showModalError('Erreur serveur');
+    }
+}
+
+function getFormData() {
+    // Récupérer les données du formulaire et les prépare pour l'API
+    let price = parseFloat(document.getElementById('m-price').value);
+    if (!price) {
+        price = null;
+    }
+
+    let year = parseInt(document.getElementById('m-year').value);
+    if (!year) {
+        year = null;
+    }
+
+    return {
+        // Les champs obligatoires
+        title: document.getElementById('m-title').value.trim(),
+        description: document.getElementById('m-description').value.trim(),
+        sale: parseInt(document.getElementById('m-sale').value),
+        location: document.getElementById('m-location').value.trim(),
+        brand: document.getElementById('m-brand').value.trim(),
+        model: document.getElementById('m-model').value.trim(),
+        price: price,
+        year_first_registration: year
+    };
+}
+
+function openDeleteAdModal(idAnnonce) {
+    annonceASupprimerId = idAnnonce;
+    document.getElementById('modal-supprimer').classList.add('active');
+}
+
+function closeDeleteModal() {
+    annonceASupprimerId = null;
+    document.getElementById('modal-supprimer').classList.remove('active');
+}
+
+async function confirmDeleteAd() {
+    const token = localStorage.getItem('token');
+
+    try {
+        const response = await fetch(`${API_URL}/annonces/${annonceASupprimerId}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+
+        closeDeleteModal();
+
+        if (response.ok) {
+            showGlobalMessage('Annonce supprimée', 'success');
+            loadMyAds();
+        } else {
+            showGlobalMessage('Erreur suppression', 'danger');
+        }
+
+    } catch {
+        showGlobalMessage('Erreur serveur', 'danger');
+    }
+}
+
+function showGlobalMessage(message, type) {
+    // Afficher un message global en haut de la page
+    const messageGlobal = document.getElementById('msg-global');
+    messageGlobal.textContent = message;
+    messageGlobal.className = `alert alert-${type}`;
+    messageGlobal.classList.remove('d-none');
+
+    setTimeout(function () {
+        messageGlobal.classList.add('d-none');
+    }, 4000);
+}
+
+function showModalError(message) {
+    const messageGlobal = document.getElementById('modal-erreur');
+    messageGlobal.textContent = message;
+    messageGlobal.classList.remove('d-none');
+}
+
+function showLoadError() {
+    document.getElementById('liste-annonces').innerHTML =
+        '<div class="error">Erreur de chargement</div>';
+}
+
+function redirectToLogin() {
+    window.location.href = 'pageConnexion.html';
+}
+
+function logout() {
+    localStorage.clear();
+    redirectToLogin();
+}
+
+document.getElementById('modal-annonce').addEventListener('click', function (e) {
+    if (e.target.id === 'modal-annonce') {
+        closeAdModal();
+    }
+});
+
+document.getElementById('modal-supprimer').addEventListener('click', function (e) {
+    if (e.target.id === 'modal-supprimer') {
+        closeDeleteModal();
+    }
+});
+
+function closeAdModal() {
+    document.getElementById('modal-annonce').classList.remove('active');
+    annonceEnEditionId = null;
+}
+
+initPage();

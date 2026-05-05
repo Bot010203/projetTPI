@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mes annonces — Plateforme véhicules</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="/Frontend/Style/gestionAnnonce.css">
+    <link rel="stylesheet" href="/Frontend/Style/pageGestionAnnonce.css">
 </head>
 
 <body>
     <header>
         <h1><i class="bi bi-megaphone me-2"></i> Mes annonces</h1>
         <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-            <a href="index.html" class="btn"><i class="bi bi-arrow-left"></i> Accueil</a>
+            <a href="pageAnnonce.html" class="btn"><i class="bi bi-arrow-left"></i> Accueil</a>
             <a href="pageConversations.html" class="btn"><i class="bi bi-chat"></i> Conversations</a>
-            <button class="btn btn-danger" onclick="deconnexion()"><i class="bi bi-box-arrow-right"></i>
+            <button class="btn btn-danger" onclick="logout()"><i class="bi bi-box-arrow-right"></i>
                 Déconnexion</button>
         </div>
     </header>
@@ -24,8 +24,9 @@
 
         <div class="page-header">
             <h2>Gérer mes annonces</h2>
-            <button class="btn btn-dark" onclick="ouvrirModalCreer()">
-                <i class="bi bi-plus-lg"></i> Nouvelle annonce
+            <button class="btn btn-dark" onclick="openCreateAdModal()">
+                <i class="bi bi-plus-lg"></i> Nouvelle
+                annonce
             </button>
         </div>
 
@@ -51,7 +52,7 @@
             <div>
                 <h5>Navigation</h5>
                 <ul>
-                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="pageAnnonce.html">Accueil</a></li>
                     <li><a href="pageConnexion.html">Se connecter</a></li>
                 </ul>
             </div>
@@ -71,7 +72,7 @@
             <div id="modal-erreur" class="alert alert-danger d-none"></div>
 
             <div class="form-group">
-                <label>Titre *</label>
+                <label>Titre ()</label>
                 <input type="text" id="m-title" placeholder="Titre de l'annonce">
             </div>
 
@@ -117,8 +118,8 @@
             </div>
 
             <div class="modal-footer">
-                <button class="btn" onclick="fermerModal()">Annuler</button>
-                <button class="btn btn-dark" id="btn-sauvegarder" onclick="sauvegarderAnnonce()">
+                <button class="btn" onclick="closeAdModal()">Annuler</button>
+                <button class="btn btn-dark" id="btn-sauvegarder" onclick="saveAd()">
                     <i class="bi bi-check-lg"></i> Sauvegarder
                 </button>
             </div>
@@ -128,11 +129,10 @@
     <div class="modal-overlay" id="modal-supprimer">
         <div class="modal" style="max-width:400px;">
             <h3>Confirmer la suppression</h3>
-            <p style="margin: 1rem 0; color: #666;">Êtes-vous sûr de vouloir supprimer cette annonce ? Cette action est
-                irréversible.</p>
+            <p style="margin: 1rem 0; color: #666;">Supprimer cette annonce ?</p>
             <div class="modal-footer">
-                <button class="btn" onclick="fermerModalSupprimer()">Annuler</button>
-                <button class="btn btn-danger" onclick="confirmerSuppression()">
+                <button class="btn" onclick="closeDeleteModal()">Annuler</button>
+                <button class="btn btn-danger" onclick="confirmDeleteAd()">
                     <i class="bi bi-trash"></i> Supprimer
                 </button>
             </div>

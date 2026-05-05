@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes conversations — Plateforme véhicules</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/Frontend/Style/pageGestionConversation.css">
+</head>
+
+<body>
+    <header>
+        <h1><i class="bi bi-chat-dots"></i> Mes conversations</h1>
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <a href="index.html" class="btn"><i class="bi bi-arrow-left"></i> Accueil</a>
+            <a href="pageGestionAnnonces.html" class="btn"><i class="bi bi-megaphone"></i> Mes annonces</a>
+            <button class="btn btn-danger" onclick="deconnexion()"><i class="bi bi-box-arrow-right"></i>
+                Déconnexion</button>
+        </div>
+    </header>
+
+    <main>
+
+        <div id="page-liste" class="liste-conversations-page">
+            <div class="page-header">
+                <h2>Mes conversations</h2>
+            </div>
+
+            <div id="msg-global" class="alert d-none"></div>
+
+            <div id="liste-conversations">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Chargement...</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-detail" class="detail-conversation">
+
+            <div class="detail-header">
+                <button class="btn btn-sm" onclick="retourListe()">
+                    <i class="bi bi-arrow-left"></i> Retour
+                </button>
+                <div>
+                    <h3 id="detail-sujet"></h3>
+                    <p id="detail-correspondant"></p>
+                </div>
+                <button class="btn btn-danger btn-sm" onclick="ouvrirModalSupprimer()" style="margin-left:auto;">
+                    <i class="bi bi-trash"></i> Supprimer
+                </button>
+            </div>
+
+            <div id="msg-detail" class="alert d-none"></div>
+
+            <div class="messages-liste" id="messages-liste"></div>
+
+            <div class="form-reponse">
+                <label>Répondre</label>
+                <textarea id="texte-reponse" rows="3" placeholder="Votre message..."></textarea>
+                <div class="form-reponse-footer">
+                    <button class="btn btn-dark" onclick="envoyerReponse()">
+                        <i class="bi bi-send"></i> Envoyer
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="footer-inner">
+            <div>
+                <h5>Plateforme véhicules</h5>
+                <p>Trouvez et publiez des annonces facilement.</p>
+            </div>
+            <div>
+                <h5>Navigation</h5>
+                <ul>
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="pageConnexion.html">Se connecter</a></li>
+                </ul>
+            </div>
+            <div class="footer-right">
+                <h5>Contact</h5>
+                <p>Email: contact@vehicules.com</p>
+                <p>Téléphone: +00 000 00 00</p>
+            </div>
+        </div>
+        <div class="footer-bottom">© 2026 Plateforme véhicules</div>
+    </footer>
+
+    <div class="modal-overlay" id="modal-supprimer">
+        <div class="modal">
+            <h3>Supprimer la conversation</h3>
+            <p>Êtes-vous sûr de vouloir supprimer cette conversation ? Cette action est irréversible.</p>
+            <div class="modal-footer">
+                <button class="btn" onclick="fermerModalSupprimer()">Annuler</button>
+                <button class="btn btn-danger" onclick="confirmerSuppression()">
+                    <i class="bi bi-trash"></i> Supprimer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/Frontend/Js/pageGestionConversation.js"></script>
+</body>

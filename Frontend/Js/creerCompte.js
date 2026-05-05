@@ -1,11 +1,12 @@
 
 const API = 'http://localhost:8000';
-async function creerCompte() {
+async function createAccount() {
     const login = document.getElementById('login').value.trim();
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value.trim();
     const confirmPassword = document.getElementById('confirm-password').value.trim();
 
+    //Vérification des champs
     if (!login || !email || !password || !confirmPassword) {
         displayErrorMessage('Tous les champs sont requis');
         return;
@@ -22,6 +23,7 @@ async function creerCompte() {
         });
         const data = await reponse.json();
         if (!reponse.ok) {
+            //Affichage de l'erreur retournée par l'API ou d'un message                                            
             displayErrorMessage(typeof data === 'string' ? data : data.message || data.error || 'Erreur');
             return;
         }
