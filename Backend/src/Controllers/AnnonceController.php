@@ -243,7 +243,7 @@ class AnnonceController
     public function mesAnnonces(Request $request, Response $response)
     {
         $user = $request->getAttribute('user');
-        $annonces = Annonce::readByUserId($user['id_user']);
+        $annonces = Annonce::readByUserIdWithThumbnail($user['id_user']);
 
         $response->getBody()->write(json_encode($annonces));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);

@@ -54,7 +54,7 @@ class MessageController
             date('Y-m-d H:i:s'),
             false,
             $user['id_user'],
-            $annonce['id_user'],
+            $id_recipient,  
             $args['id'],
             $data['original_message_id'] ?? null
         );

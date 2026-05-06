@@ -126,7 +126,7 @@ function createAdCard(annonce) {
     </div>`;
 }
 
-function formatPrice(prix) 
+function formatPrice(prix)
 // Formater le prix  avec séparation des milliers
 {
     if (prix) {
@@ -238,7 +238,9 @@ async function saveAd() {
             showModalError(message);
             return;
         }
-
+        if (!annonceEnEditionId && result.id_advertisement) {
+            await uploadImages(result.id_advertisement, token);
+        }
         closeAdModal();
         showGlobalMessage('Annonce sauvegardée !', 'success');
         loadMyAds();
@@ -247,7 +249,21 @@ async function saveAd() {
         showModalError('Erreur serveur');
     }
 }
+async function uploadImages(idAnnonce, token) {
+    const input = document.getElementById('m-images');
+    if (!input || input.files.length === 0) return;
 
+    for (let i = 0; i < input.files.length; i++) {
+        const formData = new FormData();
+        formData.append('image', input.files[i]);
+
+        await fetch(`${API_URL}/annonces/${idAnnonce}/images`, {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + token },
+            body: formData
+        });
+    }
+}
 function getFormData() {
     // Récupérer les données du formulaire et les prépare pour l'API
     let price = parseFloat(document.getElementById('m-price').value);
@@ -352,6 +368,7 @@ document.getElementById('modal-supprimer').addEventListener('click', function (e
 
 function closeAdModal() {
     document.getElementById('modal-annonce').classList.remove('active');
+    document.getElementById('m-images').value = '';
     annonceEnEditionId = null;
 }
 
