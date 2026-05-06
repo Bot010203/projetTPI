@@ -184,7 +184,7 @@ function updateNavbar() {
     } else {
         nav.innerHTML = `
             <a href="pageConnexion.html" class="btn">Connexion</a>
-            <a href="pageInscription.html" class="btn btn-dark">Inscription</a>
+            <a href="pageCreerCompte.html" class="btn btn-dark">Inscription</a>
         `;
     }
 }
