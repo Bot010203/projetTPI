@@ -25,7 +25,7 @@ class MessageController
      * @param Response $response
      * @param array $args
      */
-    public function envoyerMessage(Request $request, Response $response, array $args)
+    public function sendMessage(Request $request, Response $response, array $args)
     {
         $user = $request->getAttribute('user');
         $annonce = Annonce::readById($args['id']);
@@ -67,17 +67,17 @@ class MessageController
      * @param Request $request
      * @param Response $response
      */
-    public function avoirConversations(Request $request, Response $response)
+    public function getConversations(Request $request, Response $response)
     {
         $user = $request->getAttribute('user');
-        $conversations = Message::avoirConversations($user['id_user']);
+        $conversations = Message::getConversations($user['id_user']);
         $response->getBody()->write(json_encode($conversations));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
-    public function avoirMessagesParConversation(Request $request, Response $response, array $args)
+    public function getMessagesByConversation(Request $request, Response $response, array $args)
     {
         $user = $request->getAttribute('user');
-        $messages = Message::avoirMessagesParConversation(
+        $messages = Message::getMessagesByConversation(
             $args['id_advertisement'],
             $args['id_user'],
             $user['id_user']
@@ -95,7 +95,7 @@ class MessageController
                     null,
                     null
                 );
-                $msg->marquerCommeLu();
+                $msg->markAsRead();
             }
         }
         $response->getBody()->write(json_encode($messages));
@@ -107,10 +107,10 @@ class MessageController
      * @param Response $response
      * @param array $args
      */
-    public function supprimerConversation(Request $request, Response $response, array $args)
+    public function deleteConversation(Request $request, Response $response, array $args)
     {
         $user = $request->getAttribute('user');
-        $messages = Message::avoirMessagesParConversation(
+        $messages = Message::getMessagesByConversation(
             $args['id_advertisement'],
             $args['id_user'],
             $user['id_user']

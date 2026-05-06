@@ -57,7 +57,7 @@ function renderAdsList(annonces) {
 function renderEmptyAds() {
     document.getElementById('liste-annonces').innerHTML = `
         <div class="empty">
-            <i class="bi bi-megaphone" style="font-size:3rem;"></i>
+            <i class="bi" style="font-size:3rem;"></i>
             <p>Vous n'avez pas encore d'annonces.</p>
             <button class="btn btn-dark" onclick="openCreateAdModal()">
                 <i class="bi bi-plus-lg"></i> Créer une annonce

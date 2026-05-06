@@ -98,7 +98,7 @@ class Message
      * Summary of marquerCommeLu permet de savoir si un message a été lu
      * @return void
      */
-    public function marquerCommeLu()
+    public function markAsRead()
     {
         $pdo = PDOSingleton::getInstance()->getConnection();
         $stmt = $pdo->prepare("UPDATE Message SET `read` = 1 WHERE id_message = :id_message");
@@ -118,7 +118,7 @@ class Message
      * Summary of avoirConversations
      * @param mixed $id_user
      */
-    public static function avoirConversations($id_user)
+    public static function getConversations($id_user)
     {
         //aide IA pour faire la requete
         $pdo = PDOSingleton::getInstance()->getConnection();
@@ -150,7 +150,7 @@ class Message
      * @param mixed $id_user1
      * @param mixed $id_user2
      */
-    public static function avoirMessagesParConversation($id_advertisement, $id_user1, $id_user2)
+    public static function getMessagesByConversation($id_advertisement, $id_user1, $id_user2)
     {
         $pdo = PDOSingleton::getInstance()->getConnection();
         $stmt = $pdo->prepare("

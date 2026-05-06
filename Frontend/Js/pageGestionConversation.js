@@ -35,7 +35,7 @@ function displayConversations(conversations) {
     if (conversations.length === 0) {
         document.getElementById('liste-conversations').innerHTML = `
             <div class="empty">
-                <i class="bi bi-chat-dots" style="font-size:3rem; display:block; margin-bottom:1rem; opacity:0.3;"></i>
+                <i class="bi " style="font-size:3rem; display:block; margin-bottom:1rem; opacity:0.3;"></i>
                 <p>Vous n'avez pas encore de conversations.</p>
             </div>`;
         return;

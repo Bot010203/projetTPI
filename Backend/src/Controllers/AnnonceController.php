@@ -25,7 +25,7 @@ class AnnonceController
      * @param Request $request
      * @param Response $response
      */
-    public function recupererAnnonces(Request $request, Response $response)
+    public function getAdvertisements(Request $request, Response $response)
     {
         $pdo = PDOSingleton::getInstance()->getConnection();
         // Récupérer les paramètres de recherche depuis la requête GET
@@ -117,7 +117,7 @@ class AnnonceController
      * @param Response $response
      * @param array $args
      */
-    public function recupererAnnooncesById(Request $request, Response $response, array $args)
+    public function getAdvertisementById(Request $request, Response $response, array $args)
     {
         $annonce = Annonce::readById($args['id']);
         if (!$annonce) {
@@ -133,7 +133,7 @@ class AnnonceController
      * @param Request $request
      * @param Response $response
      */
-    public function creerAnnonce(Request $request, Response $response)
+    public function createAdvertisement(Request $request, Response $response)
     {
         $user = $request->getAttribute('user');
         $data = json_decode($request->getBody()->getContents(), true);
@@ -167,7 +167,7 @@ class AnnonceController
      * @param Response $response
      * @param array $args
      */
-    public function modifierAnnonce(Request $request, Response $response, array $args)
+    public function updateAdvertisement(Request $request, Response $response, array $args)
     {
         $user = $request->getAttribute('user');
 
@@ -216,7 +216,7 @@ class AnnonceController
      * @param Response $response
      * @param array $args
      */
-    public function supprimerAnnonce(Request $request, Response $response, array $args)
+    public function deleteAdvertisement(Request $request, Response $response, array $args)
     {
         //Vérifie l'utilisateur connecté
         $user = $request->getAttribute('user');
@@ -240,7 +240,7 @@ class AnnonceController
         $response->getBody()->write(json_encode(['message' => 'Annonce supprimée']));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
-    public function mesAnnonces(Request $request, Response $response)
+    public function getMyAdvertisements(Request $request, Response $response)
     {
         $user = $request->getAttribute('user');
         $annonces = Annonce::readByUserIdWithThumbnail($user['id_user']);

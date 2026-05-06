@@ -15,11 +15,6 @@ use App\Middleware\AuthMiddleware;
 use Slim\App;
 final class Web
 {
-    /**
-     * Summary of register 
-     * @param App $app
-     * @return void
-     */
     public static function register(App $app): void
     {
         $app->get('/', function ($request, $response) {
@@ -27,34 +22,31 @@ final class Web
             return $response;
         });
 
-
         $app->post('/login', [AuthController::class, 'login']);
         $app->post('/register', [AuthController::class, 'register']);
 
-        $app->get('/annonces', [AnnonceController::class, 'recupererAnnonces']);
-        $app->get('/annonces/{id}', [AnnonceController::class, 'recupererAnnooncesById']);
+        $app->get('/annonces', [AnnonceController::class, 'getAdvertisements']);
+        $app->get('/annonces/{id}', [AnnonceController::class, 'getAdvertisementById']);
 
-        $app->get('/annonces/{id}/images', [ImageController::class, 'recupererImages']);
+        $app->get('/annonces/{id}/images', [ImageController::class, 'getImages']);
 
         $app->group('', function ($group) {
 
             // Annonces
-            $group->get('/mes-annonces', [AnnonceController::class, 'mesAnnonces']);
-            $group->post('/annonces', [AnnonceController::class, 'creerAnnonce']);
-            $group->put('/annonces/{id}', [AnnonceController::class, 'modifierAnnonce']);
-            $group->delete('/annonces/{id}', [AnnonceController::class, 'supprimerAnnonce']);
-
-
+            $group->get('/mes-annonces', [AnnonceController::class, 'getMyAdvertisements']);
+            $group->post('/annonces', [AnnonceController::class, 'createAdvertisement']);
+            $group->put('/annonces/{id}', [AnnonceController::class, 'updateAdvertisement']);
+            $group->delete('/annonces/{id}', [AnnonceController::class, 'deleteAdvertisement']);
 
             // Images
-            $group->post('/annonces/{id}/images', [ImageController::class, 'ajouterImage']);
-            $group->delete('/annonces/{id}/images/{id_image}', [ImageController::class, 'supprimerImage']);
+            $group->post('/annonces/{id}/images', [ImageController::class, 'addImage']);
+            $group->delete('/annonces/{id}/images/{id_image}', [ImageController::class, 'deleteImage']);
 
             // Messages
-            $group->post('/annonces/{id}/messages', [MessageController::class, 'envoyerMessage']);
-            $group->get('/conversations', [MessageController::class, 'avoirConversations']);
-            $group->get('/conversations/{id_advertisement}/{id_user}', [MessageController::class, 'avoirMessagesParConversation']);
-            $group->delete('/conversations/{id_advertisement}/{id_user}', [MessageController::class, 'supprimerConversation']);
+            $group->post('/annonces/{id}/messages', [MessageController::class, 'sendMessage']);
+            $group->get('/conversations', [MessageController::class, 'getConversations']);
+            $group->get('/conversations/{id_advertisement}/{id_user}', [MessageController::class, 'getMessagesByConversation']);
+            $group->delete('/conversations/{id_advertisement}/{id_user}', [MessageController::class, 'deleteConversation']);
 
         })->add(new AuthMiddleware());
     }

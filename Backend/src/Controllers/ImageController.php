@@ -26,7 +26,7 @@ class ImageController
      * @param array $args
      * @return Response
      */
-    public function ajouterImage(Request $request, Response $response, array $args): Response
+    public function addImage(Request $request, Response $response, array $args): Response
     {
         $uploadDir = __DIR__ . '/../../public/uploads/';
         $typesAutorises = ['image/jpeg', 'image/png', 'image/gif'];
@@ -109,7 +109,7 @@ class ImageController
         return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
     }
 
-    public function recupererImages(Request $request, Response $response, array $args)
+    public function getImages(Request $request, Response $response, array $args)
     {
         $annonce = Annonce::readById($args['id']);
         if (!$annonce) {
@@ -123,7 +123,7 @@ class ImageController
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
 
-    public function supprimerImage(Request $request, Response $response, array $args)
+    public function deleteImage(Request $request, Response $response, array $args)
     {
         // Vérifier que l'utilisateur est connecté
         $user = $request->getAttribute('user');

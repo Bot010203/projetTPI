@@ -40,7 +40,7 @@ async function loadAds() {
     if (priceMax) {
         url += 'price_max=' + priceMax + '&';
     }
-    if (sale) {
+    if (sale !== '') {
         url += 'sale=' + sale + '&';
     }
     if (sortBy) {
@@ -206,7 +206,7 @@ function resetFiltres() {
     loadAds();
 }
 function loginUser() {
-     const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
     const login = localStorage.getItem('login');
 
     const h1 = document.querySelector('h1');
@@ -216,6 +216,14 @@ function loginUser() {
     } else {
         h1.textContent = "Bienvenue sur la Plateforme d'annonces pour véhicules";
     }
+}
+function redirectToLogin() {
+    window.location.href = 'pageConnexion.html';
+}
+
+function logout() {
+    localStorage.clear();
+    redirectToLogin();
 }
 loginUser();
 loadAds();
