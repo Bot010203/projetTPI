@@ -35,6 +35,7 @@ async function getConnected() {
         displayErrorMessage('Erreur lors de la connexion');
     }
 }
+//Affichage d'un message d'erreur
 function displayErrorMessage(message) {
     const msgErreur = document.getElementById('msg-erreur');
     msgErreur.textContent = message;

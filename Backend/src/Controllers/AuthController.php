@@ -14,6 +14,9 @@ use Firebase\JWT\JWT;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
+/**
+ * Classe authController
+ */
 class AuthController
 {
     private string $secret = "8f3c9c2b7a1d4e6f9c0b5a7d9e1f2c3a_super_secret_key_2026";
@@ -53,7 +56,12 @@ class AuthController
             'login' => $user['login']
         ]);
     }
-
+    /**
+     * permet de créer un nouvel utilisateur
+     * @param Request $request
+     * @param Response $response
+     * @return Response
+     */
     public function register(Request $request, Response $response): Response
     {
         $data = json_decode($request->getBody()->getContents(), true) ?? [];
@@ -101,7 +109,7 @@ class AuthController
     }
 
     /**
-     * Summary of send permet d'envoyer la réponse json à l'api
+     * permet d'envoyer la réponse json à l'api
      * @param Response $response
      * @param mixed $data
      * @param mixed $status

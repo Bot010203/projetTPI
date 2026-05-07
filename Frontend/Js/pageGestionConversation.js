@@ -17,7 +17,7 @@ function init() {
     }
     fetchConversations();
 }
-
+// Récupérer la liste des conversations de l'utilisateur et les afficher
 async function fetchConversations() {
     const token = localStorage.getItem('token');
     try {
@@ -30,7 +30,7 @@ async function fetchConversations() {
         console.error('Erreur lors de la récupération des conversations :', error);
     }
 }
-
+// Afficher la liste des conversations ou un message si aucune conversation n'est présente
 function displayConversations(conversations) {
     if (conversations.length === 0) {
         document.getElementById('liste-conversations').innerHTML = `
@@ -49,7 +49,7 @@ function displayConversations(conversations) {
 
     document.getElementById('liste-conversations').innerHTML = html;
 }
-
+// Créer une carte HTML pour une conversation donnée, en indiquant si elle est non lue et en affichant les informations pertinentes
 function createConversationCard(conversation) {
     const isUnread = conversation.read == 0 && conversation.id_recipient == idUser;
     const otherUserId = conversation.id_sender == idUser
@@ -83,7 +83,7 @@ function createConversationCard(conversation) {
 
     </div>`;
 }
-
+// Ouvrir la page de détail d'une conversation, en chargeant les messages correspondants
 async function openConversation(idAdvertisement, idCorrespondant, sujet, correspondant) {
     conversationActive = { idAdvertisement, idCorrespondant };
 
@@ -119,7 +119,7 @@ async function loadMessages(idAdvertisement, idCorrespondant) {
             '<p style="color:red;">Erreur chargement des messages</p>';
     }
 }
-
+// Afficher la liste des messages d'une conversation, en différenciant les messages envoyés et reçus, et en indiquant les messages non lus
 function displayMessages(messages) {
     if (messages.length === 0) {
         document.getElementById('messages-liste').innerHTML =
@@ -155,7 +155,7 @@ function displayMessages(messages) {
 
     document.getElementById('messages-liste').innerHTML = html;
 }
-
+// Envoyer une réponse dans la conversation active, puis recharger les messages
 async function sendReply() {
     const token = localStorage.getItem('token');
     const texte = document.getElementById('texte-reponse').value.trim();
@@ -189,12 +189,12 @@ async function sendReply() {
         document.getElementById('msg-detail').textContent = 'Erreur serveur';
     }
 }
-
+// Préparer la suppression d'une conversation en stockant les informations nécessaires et en ouvrant le modal de confirmation
 function prepareDeleteConversation(idAdvertisement, idCorrespondant) {
     conversationActive = { idAdvertisement, idCorrespondant };
     openDeleteModal();
 }
-
+// Ouvrir le modal de confirmation de suppression de conversation
 function openDeleteModal() {
     document.getElementById('modal-supprimer').classList.add('active');
 }
@@ -202,7 +202,7 @@ function openDeleteModal() {
 function closeDeleteModal() {
     document.getElementById('modal-supprimer').classList.remove('active');
 }
-
+// Confirmer la suppression d'une conversation en appelant l'API, puis revenir à la liste des conversations et afficher un message global
 async function confirmDeleteConversation() {
     const token = localStorage.getItem('token');
 
@@ -230,14 +230,14 @@ async function confirmDeleteConversation() {
         showGlobalMessage('Impossible de contacter le serveur', 'danger');
     }
 }
-
+// Revenir à la liste des conversations 
 function goBackToList() {
     document.getElementById('page-detail').classList.remove('active');
     document.getElementById('page-liste').classList.remove('hidden');
     conversationActive = null;
     fetchConversations();
 }
-
+// Afficher un message global en haut de la page 
 function showGlobalMessage(message, type) {
     const el = document.getElementById('msg-global');
     el.textContent = message;
@@ -246,7 +246,7 @@ function showGlobalMessage(message, type) {
 
     setTimeout(() => el.classList.add('d-none'), 4000);
 }
-
+// Déconnexion de l'utilisateur en supprimant les informations de connexion 
 function logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('id_user');

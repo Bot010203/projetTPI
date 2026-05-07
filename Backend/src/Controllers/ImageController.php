@@ -9,13 +9,11 @@
 namespace App\Controllers;
 use App\Models\Image;
 use App\Models\Annonce;
-use App\Controllers\AnnonceController;
-use App\Models\User;
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-
+/**
+ * Classe ImageController
+ */
 class ImageController
 {
 
@@ -31,10 +29,8 @@ class ImageController
         $uploadDir = __DIR__ . '/../../public/uploads/';
         $typesAutorises = ['image/jpeg', 'image/png', 'image/gif'];
         $tailleMax = 5 * 1024 * 1024;
-        //Vérifier que l'utilisateur est connecté
         $user = $request->getAttribute('user');
 
-        //Vérifier que l'annonce existe
         $annonce = Annonce::readById($args['id']);
         if (!$annonce) {
             $response->getBody()->write(json_encode(['error' => 'Annonce non trouvée']));
@@ -47,7 +43,6 @@ class ImageController
             return $response->withHeader('Content-Type', 'application/json')->withStatus(403);
         }
 
-        //Vérifier qu'un fichier a bien été envoyé
         $uploadedFiles = $request->getUploadedFiles();
         if (empty($uploadedFiles['image'])) {
             $response->getBody()->write(json_encode(['error' => 'Aucune image envoyée']));
@@ -56,7 +51,6 @@ class ImageController
 
         $file = $uploadedFiles['image'];
 
-        //Vérifier qu'il n'y a pas eu d'erreur lors de l'upload
         if ($file->getError() !== UPLOAD_ERR_OK) {
             $response->getBody()->write(json_encode(['error' => 'Erreur lors de l\'upload']));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(500);
@@ -73,13 +67,11 @@ class ImageController
             return $response->withHeader('Content-Type', 'application/json')->withStatus(422);
         }
 
-        //Vérifier la taille du fichier
         if ($file->getSize() > $tailleMax) {
             $response->getBody()->write(json_encode(['error' => 'Fichier trop volumineux (max 5MB)']));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(422);
         }
 
-        //Créer le dossier d'upload si nécessaire
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0755, true);
         }
@@ -99,7 +91,7 @@ class ImageController
 
         //Sauvegarder le chemin en base de données
         $image = new Image(null, '/uploads/' . $filename, $args['id']);
-        $image->ajouterImage();
+        $image->addImage();
 
         $response->getBody()->write(json_encode([
             'message' => 'Image uploadée avec succès',
@@ -108,7 +100,12 @@ class ImageController
         ]));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
     }
-
+    /**
+     * permet de récupérer les images d'une annonce
+     * @param Request $request
+     * @param Response $response
+     * @param array $args
+     */
     public function getImages(Request $request, Response $response, array $args)
     {
         $annonce = Annonce::readById($args['id']);
@@ -122,35 +119,36 @@ class ImageController
         $response->getBody()->write(json_encode($images));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
+    /**
+     * permet de supprimer une image
+     * @param Request $request
+     * @param Response $response
+     * @param array $args
+     */
 
     public function deleteImage(Request $request, Response $response, array $args)
     {
-        // Vérifier que l'utilisateur est connecté
         $user = $request->getAttribute('user');
 
-        // Vérifier que l'image existe
         $image = Image::readById($args['id']);
         if (!$image) {
             $response->getBody()->write(json_encode(['error' => 'Image non trouvée']));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
         }
 
-        // Vérifier que l'annonce associée appartient à l'utilisateur connecté
         $annonce = Annonce::readById($image['id_advertisement']);
         if ((int) $annonce['id_user'] !== (int) $user['id_user']) {
             $response->getBody()->write(json_encode(['error' => 'Accès interdit']));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(403);
         }
 
-        // Supprimer le fichier physique
         $filePath = __DIR__ . '/../../public' . $image['path'];
         if (file_exists($filePath)) {
             unlink($filePath);
         }
 
-        // Supprimer l'image de la base de données
         $imageObj = new Image($args['id'], null, null);
-        $imageObj->supprimerImage();
+        $imageObj->deleteImage();
 
         $response->getBody()->write(json_encode(['message' => 'Image supprimée avec succès']));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);

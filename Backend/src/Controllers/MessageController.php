@@ -15,12 +15,12 @@ use Firebase\JWT\Key;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 /**
- * Summary of MessageController
+ * Classe MessageController
  */
 class MessageController
 {
     /**
-     * Summary of envoyerMessage permet d'envyoer un message
+     *  permet d'envyoer un message
      * @param Request $request
      * @param Response $response
      * @param array $args
@@ -63,7 +63,7 @@ class MessageController
         return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
     }
     /**
-     * Summary of avoirConversations permet de récuperer la conversation
+     *  permet de récuperer la conversation
      * @param Request $request
      * @param Response $response
      */
@@ -102,7 +102,7 @@ class MessageController
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
     /**
-     * Summary of supprimerConversation permet de 
+     *  permet de supprimer une conversation
      * @param Request $request
      * @param Response $response
      * @param array $args

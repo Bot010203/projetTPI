@@ -18,7 +18,7 @@ final class Web
     public static function register(App $app): void
     {
         $app->get('/', function ($request, $response) {
-            $response->getBody()->write('Bienvenue');
+            $response->getBody()->write('Page principale');
             return $response;
         });
 

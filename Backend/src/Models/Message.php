@@ -37,7 +37,7 @@ class Message
     }
 
     /**
-     * Summary of Create permet de créer un message dans la base de données
+     *  permet de créer un message dans la base de données
      * @return void
      */
     public function create()
@@ -63,7 +63,7 @@ class Message
         $stmt->execute([':id_message' => $this->id_message]);
     }
     /**
-     * Summary of read
+     *  permet de lire un message
      * @return void
      */
     public function read()
@@ -84,7 +84,7 @@ class Message
         }
     }
     /**
-     * Summary of readOriginal 
+     *  permet de lire le message original
      * @return array
      */
     public function readOriginal()
@@ -95,7 +95,7 @@ class Message
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     /**
-     * Summary of marquerCommeLu permet de savoir si un message a été lu
+     *  permet de marquer un message comme lu
      * @return void
      */
     public function markAsRead()
@@ -115,7 +115,7 @@ class Message
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     /**
-     * Summary of avoirConversations
+     *  permet de récuperer les conversations
      * @param mixed $id_user
      */
     public static function getConversations($id_user)
@@ -145,7 +145,7 @@ class Message
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     /**
-     * Summary of avoirMessagesParConversation
+     *  permet de récuperer les messages d'une conversation
      * @param mixed $id_advertisement
      * @param mixed $id_user1
      * @param mixed $id_user2

@@ -11,17 +11,13 @@ namespace App\Controllers;
 use App\Models\PDOSingleton;
 use App\Models\Annonce;
 use PDO;
-use App\Models\User;
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
 class AnnonceController
 {
-    private string $secret = "8f3c9c2b7a1d4e6f9c0b5a7d9e1f2c3a_super_secret_key_2026";
     /**
-     * Summary of recupererAnnonces permet de faire des filtres de recherches
+     * permet de faire des filtres de recherches
      * @param Request $request
      * @param Response $response
      */
@@ -112,7 +108,7 @@ class AnnonceController
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
     /**
-     * Summary of recupererAnnooncesById permet de récuperer une annonce par son id
+     * permet de récuperer une annonce par son id
      * @param Request $request
      * @param Response $response
      * @param array $args
@@ -129,7 +125,7 @@ class AnnonceController
         }
     }
     /**
-     * Summary of creerAnnonce permet de créer une annonce
+     * creerAnnonce permet de créer une annonce
      * @param Request $request
      * @param Response $response
      */
@@ -162,7 +158,7 @@ class AnnonceController
         return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
     }
     /**
-     * Summary of modifierAnnonce permet de modifier une annonce
+     *  permet de modifier une annonce
      * @param Request $request
      * @param Response $response
      * @param array $args
@@ -191,7 +187,7 @@ class AnnonceController
                 $annonce[$key] = $value;
             }
         }
-
+    // Crée un objet Annonce avec les données mises à jour
         $updatedAnnonce = new Annonce(
             $annonce['id_advertisement'],
             $annonce['title'],
@@ -211,7 +207,7 @@ class AnnonceController
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
     /**
-     * Summary of supprimerAnnonce permet de supprimer une annonce
+     *  permet de supprimer une annonce
      * @param Request $request
      * @param Response $response
      * @param array $args
@@ -240,6 +236,11 @@ class AnnonceController
         $response->getBody()->write(json_encode(['message' => 'Annonce supprimée']));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
+    /**
+     *  permet de récupérer les annonces de l'utilisateur connecté
+     * @param Request $request
+     * @param Response $response
+     */
     public function getMyAdvertisements(Request $request, Response $response)
     {
         $user = $request->getAttribute('user');

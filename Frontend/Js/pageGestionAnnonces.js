@@ -5,7 +5,7 @@
 * Nom fichier : pageGestionAnnonces.js
 * But : Script pour gérer la gestion des annonces de l'utilisateur
 */
-const API_URL = 'http://localhost:8000';
+const API = 'http://localhost:8000';
 
 let annonceEnEditionId = null;
 let annonceASupprimerId = null;
@@ -20,12 +20,12 @@ function initPage() {
 
     loadMyAds();
 }
-
+// Charger les annonces de l'utilisateur
 async function loadMyAds() {
     const token = localStorage.getItem('token');
 
     try {
-        const response = await fetch(`${API_URL}/mes-annonces`, {
+        const response = await fetch(`${API}/mes-annonces`, {
             headers: { 'Authorization': 'Bearer ' + token }
         });
 
@@ -36,7 +36,7 @@ async function loadMyAds() {
         showLoadError();
     }
 }
-
+// Afficher la liste des annonces ou un message si aucune annonce n'est trouvée
 function renderAdsList(annonces) {
     document.getElementById('count-annonces').textContent = annonces.length;
     // Afficher un message si aucune annonce n'est trouvée
@@ -53,7 +53,7 @@ function renderAdsList(annonces) {
     document.getElementById('liste-annonces').innerHTML =
         `<div class="annonces-grid">${html}</div>`;
 }
-
+// Afficher un message lorsque l'utilisateur n'a aucune annonce
 function renderEmptyAds() {
     document.getElementById('liste-annonces').innerHTML = `
         <div class="empty">
@@ -125,9 +125,8 @@ function createAdCard(annonce) {
         </div>
     </div>`;
 }
-
+// Formater le prix en CHF ou afficher un message si le prix n'est pas défini
 function formatPrice(prix)
-// Formater le prix  avec séparation des milliers
 {
     if (prix) {
         return parseFloat(prix).toLocaleString('fr-CH') + ' CHF';
@@ -147,11 +146,10 @@ function createBadge(estVente) {
         return '<span class="badge badge-achat">Achat</span>';
     }
 }
-
+// Créer la balise image ou un placeholder si aucune image n'est disponible
 function createImage(annonce) {
-    // Afficher l'image de l'annonce ou un placeholder
     if (annonce.thumbnail) {
-        return `<img src="${API_URL}${annonce.thumbnail}" alt="${annonce.title}">`;
+        return `<img src="${API}${annonce.thumbnail}" alt="${annonce.title}">`;
     }
 
     return `<div class="card-placeholder"><i class="bi bi-car-front"></i></div>`;
@@ -167,7 +165,7 @@ async function openEditAdModal(idAnnonce) {
     openAdModal('Modifier l\'annonce');
 
     try {
-        const response = await fetch(`${API_URL}/annonces/${idAnnonce}`);
+        const response = await fetch(`${API}/annonces/${idAnnonce}`);
         const annonce = await response.json();
 
         fillForm(annonce);
@@ -176,16 +174,14 @@ async function openEditAdModal(idAnnonce) {
         showGlobalMessage('Impossible de charger l\'annonce', 'danger');
     }
 }
-
+// Ouvrir le modal de création/modification d'annonce et réinitialiser les messages d'erreur
 function openAdModal(titre) {
-    // Ouvrir le modal de création/édition d'annonce
     document.getElementById('modal-titre').textContent = titre;
     document.getElementById('modal-erreur').classList.add('d-none');
     document.getElementById('modal-annonce').classList.add('active');
 }
-
+// Remplir le formulaire avec les données de l'annonce à modifier ou réinitialiser les champs pour une nouvelle annonce
 function fillForm(a) {
-    // Remplir le formulaire avec les données de l'annonce
     document.getElementById('m-title').value = a.title || '';
     document.getElementById('m-description').value = a.description || '';
     document.getElementById('m-sale').value = a.sale ?? '1';
@@ -195,7 +191,7 @@ function fillForm(a) {
     document.getElementById('m-price').value = a.price || '';
     document.getElementById('m-year').value = a.year_first_registration || '';
 }
-
+// Sauvegarder l'annonce en appelant l'API pour créer ou modifier une annonce selon le contexte
 async function saveAd() {
     const token = localStorage.getItem('token');
     const titre = document.getElementById('m-title').value.trim();
@@ -211,10 +207,10 @@ async function saveAd() {
     let method;
 
     if (annonceEnEditionId) {
-        url = `${API_URL}/annonces/${annonceEnEditionId}`;
+        url = `${API}/annonces/${annonceEnEditionId}`;
         method = 'PUT';
     } else {
-        url = `${API_URL}/annonces`;
+        url = `${API}/annonces`;
         method = 'POST';
     }
 
@@ -249,6 +245,7 @@ async function saveAd() {
         showModalError('Erreur serveur');
     }
 }
+// Télécharger les images sélectionnées pour une annonce donnée
 async function uploadImages(idAnnonce, token) {
     const input = document.getElementById('m-images');
     if (!input || input.files.length === 0) return;
@@ -257,15 +254,15 @@ async function uploadImages(idAnnonce, token) {
         const formData = new FormData();
         formData.append('image', input.files[i]);
 
-        await fetch(`${API_URL}/annonces/${idAnnonce}/images`, {
+        await fetch(`${API}/annonces/${idAnnonce}/images`, {
             method: 'POST',
             headers: { 'Authorization': 'Bearer ' + token },
             body: formData
         });
     }
 }
+// Récupérer les données du formulaire et les prépare pour l'API
 function getFormData() {
-    // Récupérer les données du formulaire et les prépare pour l'API
     let price = parseFloat(document.getElementById('m-price').value);
     if (!price) {
         price = null;
@@ -288,12 +285,12 @@ function getFormData() {
         year_first_registration: year
     };
 }
-
+// Ouvrir le modal de confirmation de suppression d'annonce
 function openDeleteAdModal(idAnnonce) {
     annonceASupprimerId = idAnnonce;
     document.getElementById('modal-supprimer').classList.add('active');
 }
-
+// Fermer le modal de confirmation de suppression d'annonce
 function closeDeleteModal() {
     annonceASupprimerId = null;
     document.getElementById('modal-supprimer').classList.remove('active');
@@ -303,7 +300,7 @@ async function confirmDeleteAd() {
     const token = localStorage.getItem('token');
 
     try {
-        const response = await fetch(`${API_URL}/annonces/${annonceASupprimerId}`, {
+        const response = await fetch(`${API}/annonces/${annonceASupprimerId}`, {
             method: 'DELETE',
             headers: { 'Authorization': 'Bearer ' + token }
         });
@@ -321,9 +318,8 @@ async function confirmDeleteAd() {
         showGlobalMessage('Erreur serveur', 'danger');
     }
 }
-
+// Afficher un message global en haut de la page et le faire disparaître après quelques secondes
 function showGlobalMessage(message, type) {
-    // Afficher un message global en haut de la page
     const messageGlobal = document.getElementById('msg-global');
     messageGlobal.textContent = message;
     messageGlobal.className = `alert alert-${type}`;
@@ -333,13 +329,13 @@ function showGlobalMessage(message, type) {
         messageGlobal.classList.add('d-none');
     }, 4000);
 }
-
+// Afficher un message d'erreur dans le modal de création/modification d'annonce
 function showModalError(message) {
     const messageGlobal = document.getElementById('modal-erreur');
     messageGlobal.textContent = message;
     messageGlobal.classList.remove('d-none');
 }
-
+// Afficher un message d'erreur dans la liste des annonces en cas de problème de chargement
 function showLoadError() {
     document.getElementById('liste-annonces').innerHTML =
         '<div class="error">Erreur de chargement</div>';
@@ -348,7 +344,7 @@ function showLoadError() {
 function redirectToLogin() {
     window.location.href = 'pageConnexion.html';
 }
-
+// Déconnexion de l'utilisateur
 function logout() {
     localStorage.clear();
     redirectToLogin();

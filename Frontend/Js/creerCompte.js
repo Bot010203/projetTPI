@@ -39,7 +39,7 @@ async function createAccount() {
         displayErrorMessage('Erreur lors de la création du compte');
     }
 }
-
+//Affichage d'un message d'erreur
 function displayErrorMessage(message) {
     const msgErreur = document.getElementById('msg-erreur');
     msgErreur.textContent = message;

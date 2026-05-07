@@ -9,6 +9,7 @@
 namespace App\Models;
 use PDO;
 use PDOException;
+require_once __DIR__ . '/../../config.php';
 
 /**
  * Summary of PDOSingleton classe pour la connexion a la bdd
@@ -20,10 +21,10 @@ class PDOSingleton
     //Connexion à la PDO
     private $pdo;
     // Informations de connexion à la base de données
-    private $host='localhost';
-    private $db='annonces_vehicules_db';
-    private $user='root';
-    private $pass='xgfmn3';
+    private $host= DB_HOST;
+    private $db= DB_NAME;
+    private $user= DB_USER;
+    private $pass= DB_PASS;
     private $charset = 'utf8mb4';
     private function __construct()
     {

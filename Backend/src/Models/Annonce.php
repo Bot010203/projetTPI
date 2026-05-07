@@ -10,7 +10,9 @@ namespace App\Models;
 
 use App\Models\PDOSingleton;
 use PDO;
-
+/**
+ * Classe annonce
+ */
 class Annonce
 {
     public $id_advertisement;
@@ -42,7 +44,7 @@ class Annonce
     }
 
     /**
-     * Summary of Create permet de créer une annonce dans la base de données
+     * permet de créer une annonce dans la base de données
      * @return void
      */
     public function create()
@@ -65,7 +67,7 @@ class Annonce
     }
 
     /**
-     * Summary of Update permet de mettre à jour une annonce dans la base de données
+     *  permet de mettre à jour une annonce dans la base de données
      * @return void
      */
     public function update()
@@ -88,7 +90,7 @@ class Annonce
     }
 
     /**
-     * Summary of Delete permet de supprimer une annonce dans la base de données
+     * permet de supprimer une annonce dans la base de données
      * @return void
      */
     public function delete()
@@ -99,7 +101,7 @@ class Annonce
     }
 
     /**
-     * Summary of ReadAll permet de lire toutes les annonces dans la base de données
+     *  permet de lire toutes les annonces dans la base de données
      * @return array
      */
     public static function readAll()
@@ -111,7 +113,7 @@ class Annonce
     }
 
     /**
-     * Summary of ReadById permet de lire une annonce par son id dans la base de données
+     *  permet de lire une annonce par son id dans la base de données
      * @param int $id_advertisement
      * @return array
      */
@@ -124,7 +126,7 @@ class Annonce
     }
 
     /**
-     * Summary of ReadByUserId permet de lire les annonces d'un user par son id dans la base de données
+     *  permet de lire les annonces d'un user par son id dans la base de données
      * @param int $id_user
      * @return array
      */
@@ -135,6 +137,10 @@ class Annonce
         $stmt->execute([':id_user' => $id_user]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    /**
+     *  permet de lire les annonces d'un user par son id dans la base de données avec le chemin de la première image de l'annonce
+     * @param mixed $id_user
+     */
     public static function readByUserIdWithThumbnail($id_user)
     {
         $pdo = PDOSingleton::getInstance()->getConnection();

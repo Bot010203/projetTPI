@@ -15,7 +15,9 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
 use Slim\Psr7\Response as SlimResponse;
-
+/**
+ * Classe AuthMiddleware
+ */
 class AuthMiddleware
 {
     private string $secret = "8f3c9c2b7a1d4e6f9c0b5a7d9e1f2c3a_super_secret_key_2026";
@@ -46,7 +48,10 @@ class AuthMiddleware
             return $this->unauthorized();
         }
     }
-
+    /**
+     *  Permet de retourner une réponse 401 non autorisé
+     * @return Response
+     */
     private function unauthorized(): Response
     {
         $response = new SlimResponse();

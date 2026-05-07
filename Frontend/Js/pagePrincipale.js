@@ -6,12 +6,10 @@
 * But : Script pour gérer l'affichage des annonces sur la page principale
 */
 const API = 'http://localhost:8000';
-
+// Charger les annonces en fonction des filtres et des options de tri sélectionnés, puis les afficher
 async function loadAds() {
-    //Avoir l'URL + un parametre
     let url = API + '/annonces?';
 
-    //Récuperer les valeurs des filtres
     const title = document.getElementById('title').value;
     const brand = document.getElementById('brand').value;
     const model = document.getElementById('model').value;
@@ -69,7 +67,7 @@ async function loadAds() {
         showError();
     }
 }
-
+// Afficher un indicateur de chargement pendant le chargement des annonces
 function showLoading() {
     document.getElementById('liste-annonces').innerHTML = `
         <div class="loading">
@@ -82,7 +80,7 @@ function showError() {
     document.getElementById('liste-annonces').innerHTML =
         `<div class="error"><p>Erreur lors du chargement</p></div>`;
 }
-
+// Afficher les annonces sous forme de cartes, ou un message si aucune annonce n'est trouvée
 function renderAds(annonces) {
     document.getElementById('count-annonces').textContent = annonces.length;
 

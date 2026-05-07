@@ -5,7 +5,7 @@
 * Nom fichier : pageDetailsAnnonce.js
 * But : Script pour gérer l'affichage des détails d'une annonce
 */
-const API_URL = 'http://localhost:8000';
+const API = 'http://localhost:8000';
 
 // Récupérer l'id de l'annonce depuis l'URL
 const urlParams = new URLSearchParams(window.location.search);
@@ -30,20 +30,20 @@ async function loadAd() {
         showError();
     }
 }
-
+// Récupérer les données de l'annonce
 async function fetchAd(id) {
     // Récupérer les données de l'annonce
-    const response = await fetch(`${API_URL}/annonces/${id}`);
+    const response = await fetch(`${API}/annonces/${id}`);
     if (!response.ok) throw new Error('Annonce introuvable');
     return await response.json();
 }
 
 async function fetchAdImages(id) {
     // Récupérer les images de l'image
-    const response = await fetch(`${API_URL}/annonces/${id}/images`);
+    const response = await fetch(`${API}/annonces/${id}/images`);
     return await response.json();
 }
-
+// Afficher les données de l'annonce
 function renderAd(annonce, images) {
     //titre de la page
     document.title = `${annonce.title} — Plateforme véhicules`;
@@ -55,7 +55,7 @@ function renderAd(annonce, images) {
 
     showContent();
 }
-
+// Afficher le badge "Vente" ou "Achat"
 function displayAdTypeBadge(estVente) {
     const badge = document.getElementById('badge-type');
 
@@ -67,9 +67,8 @@ function displayAdTypeBadge(estVente) {
         badge.classList.add('badge-achat');
     }
 }
-
+// Remplir les informations de l'annonce
 function fillAdDetails(annonce) {
-    // Remplir les informations de l'annonce
     document.getElementById('titre').textContent = annonce.title;
     document.getElementById('prix').textContent = formatPrice(annonce.price);
     document.getElementById('description').textContent = annonce.description || 'Aucune description';
@@ -79,12 +78,12 @@ function fillAdDetails(annonce) {
     document.getElementById('ville').textContent = annonce.location || '—';
     document.getElementById('date').textContent = new Date(annonce.date_publication).toLocaleDateString('fr-CH');
 }
-
+// Formater le prix en CHF
 function formatPrice(prix) {
     if (!prix) return 'Prix non défini';
     return parseFloat(prix).toLocaleString('fr-CH') + ' CHF';
 }
-
+// Afficher les images de l'annonce ou un placeholder si aucune image
 function displayAdImages(images, titre) {
     const container = document.getElementById('photo-annonce');
 
@@ -95,11 +94,11 @@ function displayAdImages(images, titre) {
             </div>`;
     } else {
         container.innerHTML = `
-            <img src="${API_URL}${images[0].path}" alt="${titre}"
+            <img src="${API}${images[0].path}" alt="${titre}"
                  style="width:100%; height:400px; object-fit:cover; border-radius:8px;">`;
     }
 }
-
+// Afficher le bloc de message 
 function displayUserBlock(idProprietaire) {
     const token = localStorage.getItem('token');
     const utilisateurId = localStorage.getItem('id_user');
@@ -112,16 +111,16 @@ function displayUserBlock(idProprietaire) {
         showBlock('bloc-connecte');
     }
 }
-
+// Afficher un bloc en supprimant la classe d-none
 function showBlock(id) {
     document.getElementById(id).classList.remove('d-none');
 }
-
+// Afficher le contenu et cacher le chargement
 function showContent() {
     document.getElementById('chargement').classList.add('d-none');
     document.getElementById('contenu').classList.remove('d-none');
 }
-
+// Afficher un message d'erreur et cacher le chargement
 function showError() {
     document.getElementById('chargement').classList.add('d-none');
     document.getElementById('erreur').classList.remove('d-none');
@@ -137,7 +136,7 @@ async function sendMessage() {
     }
 
     try {
-        const response = await fetch(`${API_URL}/annonces/${annonceId}/messages`, {
+        const response = await fetch(`${API}/annonces/${annonceId}/messages`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -157,19 +156,19 @@ async function sendMessage() {
         showErrorMessage('Impossible de contacter le serveur');
     }
 }
-
+// Afficher un message de succès et réinitialiser le champ de message
 function showSuccessMessage() {
     document.getElementById('msg-succes').classList.remove('d-none');
     document.getElementById('msg-erreur').classList.add('d-none');
     document.getElementById('message-text').value = '';
 }
-
+// Afficher un message d'erreur
 function showErrorMessage(message) {
     const el = document.getElementById('msg-erreur');
     el.textContent = message;
     el.classList.remove('d-none');
 }
-
+// Mettre à jour la barre de navigation en fonction de l'état de connexion
 function updateNavbar() {
 
     const token = localStorage.getItem('token');
@@ -188,7 +187,7 @@ function updateNavbar() {
         `;
     }
 }
-
+// Déconnexion de l'utilisateur
 function logout() {
     localStorage.clear();
     window.location.href = 'pagePrincipale.html';

@@ -10,7 +10,7 @@ namespace App\Models;
 use App\Models\PDOSingleton;
 use PDO;
 /**
- * Summary of Image classe pour gérer les images des annonces
+ * classe pour gérer les images des annonces
  */
 class Image
 {
@@ -25,7 +25,7 @@ class Image
         $this->id_advertisement = $id_advertisement;
     }
     /**
-     * Summary of addImage permet d'ajouter une image
+     *  permet d'ajouter une image
      * @return void
      */
     public function addImage()
@@ -39,7 +39,7 @@ class Image
         $this->id_picture = $pdo->lastInsertId();
     }
     /**
-     * Summary of supprimerImage permet de supprimer une image
+     *  permet de supprimer une image
      * @return void
      */
     public function deleteImage()
@@ -51,7 +51,7 @@ class Image
         ]);
     }
     /**
-     * Summary of recupererImagesParAnnonce permet de récupérer les images d'une annonce
+     *  permet de récupérer les images d'une annonce
      * @param int $id_advertisement
      * @return array
      */
@@ -65,7 +65,7 @@ class Image
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     /**
-     * Summary of recupererImageParId permet de récupérer une image par son id
+     *  permet de récupérer une image par son id
      * @param int $id_picture
      * @return array
      */

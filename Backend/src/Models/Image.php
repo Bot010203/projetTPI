@@ -25,10 +25,10 @@ class Image
         $this->id_advertisement = $id_advertisement;
     }
     /**
-     * Summary of ajouterImage permet d'ajouter une image
+     * Summary of addImage permet d'ajouter une image
      * @return void
      */
-    public function ajouterImage()
+    public function addImage()
     {
         $pdo = PDOSingleton::getInstance()->getConnection();
         $stmt = $pdo->prepare("INSERT INTO Picture (path, id_advertisement) VALUES (:path, :id_advertisement)");
@@ -42,7 +42,7 @@ class Image
      * Summary of supprimerImage permet de supprimer une image
      * @return void
      */
-    public function supprimerImage()
+    public function deleteImage()
     {
         $pdo = PDOSingleton::getInstance()->getConnection();
         $stmt = $pdo->prepare("DELETE FROM Picture WHERE id_picture = :id_picture");

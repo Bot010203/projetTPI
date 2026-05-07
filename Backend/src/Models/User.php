@@ -12,7 +12,7 @@ use App\Models\PDOSingleton;
 use PDO;
 
 /**
- * Summary of User classe user avec CRUD
+ * classe user avec CRUD
  */
 class User
 {
@@ -32,7 +32,7 @@ class User
     }
 
     /**
-     * Summary of Create permet de créer un user dans la base de données
+     *   permet de créer un user dans la base de données
      * @return void
      */
     public function create()
@@ -75,7 +75,7 @@ class User
     }
 
     /**
-     * Summary of ReadByEmail permet de lire un user dans la base de données en fonction de son email
+     *  permet de lire un user dans la base de données en fonction de son email
      * @param string $email
      * @return array
      */
@@ -88,7 +88,7 @@ class User
     }
 
     /**
-     * Summary of ReadByLogin permet de lire un user dans la base de données en fonction de son login
+     * permet de lire un user dans la base de données en fonction de son login
      * @param string $login
      * @return array
      */
